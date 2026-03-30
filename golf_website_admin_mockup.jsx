@@ -98,14 +98,36 @@ const initialPages = {
   },
 };
 
-const navItems = [
-  "Website Setup",
+const topLevelNavItems = [
+  "Dashboard",
+  "Revenue Engine",
+  "Marketing",
+  "Website Admin",
+  "AI Chat",
+  "Google Business Profile",
+  "Help",
+];
+
+const websiteAdminNavItems = [
   "Brand Settings",
   "Page Controls",
   "AI Content Engine",
   "SEO and AI Audit",
   "Publishing",
 ];
+
+const bottomMenuItems = ["Account", "Live Booking", "Support", "Sign Out"];
+
+const topLevelDescriptions = {
+  Dashboard: "Track portfolio activity, operational health, and recent website changes from one overview.",
+  "Revenue Engine": "Monitor tee sheet conversion, offer performance, and pricing initiatives across the platform.",
+  Marketing: "Coordinate campaigns, audience segments, and content workflows tied to golf course growth.",
+  "Website Admin": "Manage brand settings, page controls, AI content generation, audits, and publishing.",
+  "AI Chat": "Review AI-assisted recommendations, request updates, and coordinate with guided workflows.",
+  "Google Business Profile":
+    "Monitor local listing consistency, reviews, business details, and location-level optimization tasks.",
+  Help: "Browse walkthroughs, support resources, and product guidance for your operating team.",
+};
 
 const pageDescriptions = {
   Home: "Build the homepage hero, CTAs, and key course highlights.",
@@ -326,7 +348,8 @@ function PageFieldEditor({ activePage, pageData, onFieldChange }) {
 function GolfWebsiteAdminDashboard() {
   const [pages, setPages] = useState(initialPages);
   const [activePage, setActivePage] = useState("Membership");
-  const [activeModule, setActiveModule] = useState("Page Controls");
+  const [activeTopLevel, setActiveTopLevel] = useState("Website Admin");
+  const [activeWebsiteAdminItem, setActiveWebsiteAdminItem] = useState("Page Controls");
   const [brand, setBrand] = useState({
     courseName: "Demo Golf Club",
     fontFamily: "'Inter', sans-serif",
@@ -346,6 +369,11 @@ function GolfWebsiteAdminDashboard() {
   const enabledCount = useMemo(() => Object.values(pages).filter((page) => page.enabled).length, [pages]);
   const publishedCount = useMemo(() => Object.values(pages).filter((page) => page.status === "Published").length, [pages]);
   const activePageData = pages[activePage];
+  const isWebsiteAdminActive = activeTopLevel === "Website Admin";
+  const activeModuleTitle = isWebsiteAdminActive ? activeWebsiteAdminItem : activeTopLevel;
+  const activeModuleDescription = isWebsiteAdminActive
+    ? `${topLevelDescriptions["Website Admin"]} Secondary navigation is mocked in the flyout menu.`
+    : `${topLevelDescriptions[activeTopLevel]} The main canvas remains focused on Website Admin tools in this prototype.`;
 
   const updatePageField = (fieldName, value) => {
     setPages((prev) => ({
@@ -387,49 +415,98 @@ function GolfWebsiteAdminDashboard() {
     }));
   };
 
+  const selectTopLevelItem = (item) => {
+    setActiveTopLevel(item);
+  };
+
+  const selectWebsiteAdminItem = (item) => {
+    setActiveTopLevel("Website Admin");
+    setActiveWebsiteAdminItem(item);
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 text-slate-900">
       <div className="flex min-h-screen flex-col xl:flex-row">
-        <aside className="w-full border-b border-slate-200 bg-slate-950 text-white xl:w-72 xl:border-b-0 xl:border-r">
-          <div className="p-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500 text-sm font-bold text-slate-950">
-                GB
-              </div>
-              <div>
-                <div className="text-sm text-slate-400">Website Builder</div>
-                <div className="text-lg font-semibold">GolfBack Admin</div>
+        <aside className="relative w-full border-b border-slate-200 bg-slate-950 text-white xl:w-72 xl:border-b-0 xl:border-r">
+          <div className="flex h-full flex-col xl:min-h-screen">
+            <div className="p-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500 text-sm font-bold text-slate-950">
+                  GB
+                </div>
+                <div>
+                  <div className="text-sm text-slate-400">Website Builder</div>
+                  <div className="text-lg font-semibold">GolfBack Admin</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <nav className="px-3 pb-4">
-            {navItems.map((item) => (
-              <button
-                key={item}
-                onClick={() => setActiveModule(item)}
-                className={`mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition ${
-                  activeModule === item ? "bg-white text-slate-950 shadow" : "text-slate-300 hover:bg-slate-900"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </nav>
+            <nav className="px-3">
+              <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em] text-slate-500">Platform</div>
+              {topLevelNavItems.map((item) => (
+                <button
+                  key={item}
+                  onClick={() => selectTopLevelItem(item)}
+                  className={`mb-2 flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm transition ${
+                    activeTopLevel === item ? "bg-white text-slate-950 shadow" : "text-slate-300 hover:bg-slate-900"
+                  }`}
+                >
+                  <span>{item}</span>
+                  {item === "Website Admin" ? <span className="text-xs">{isWebsiteAdminActive ? "Open" : "Flyout"}</span> : null}
+                </button>
+              ))}
+            </nav>
 
-          <div className="px-3 pb-5">
-            <div className="rounded-3xl bg-slate-900 p-4">
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Project Snapshot</div>
-              <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-2xl bg-slate-800 p-3">
-                  <div className="text-slate-400">Enabled</div>
-                  <div className="mt-1 text-xl font-semibold text-white">{enabledCount}</div>
+            {isWebsiteAdminActive ? (
+              <div className="border-t border-slate-800 px-3 py-4 xl:absolute xl:left-[calc(100%-0.75rem)] xl:top-24 xl:z-20 xl:w-64 xl:rounded-3xl xl:border xl:border-slate-800 xl:bg-slate-950 xl:p-3 xl:shadow-2xl">
+                <div className="mb-3 px-2">
+                  <div className="text-xs uppercase tracking-[0.24em] text-slate-500">Website Admin</div>
+                  <div className="mt-1 text-sm text-slate-400">Secondary Flyout Menu</div>
                 </div>
-                <div className="rounded-2xl bg-slate-800 p-3">
-                  <div className="text-slate-400">Published</div>
-                  <div className="mt-1 text-xl font-semibold text-white">{publishedCount}</div>
+                {websiteAdminNavItems.map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => selectWebsiteAdminItem(item)}
+                    className={`mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition ${
+                      activeWebsiteAdminItem === item ? "bg-emerald-500 font-semibold text-slate-950" : "bg-slate-900 text-slate-200 hover:bg-slate-800"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+
+            <div className={`mt-2 flex-1 px-3 pb-4 ${isWebsiteAdminActive ? "xl:mt-0 xl:pt-60" : ""}`}>
+              <div className="rounded-3xl bg-slate-900 p-4">
+                <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Project Snapshot</div>
+                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-2xl bg-slate-800 p-3">
+                    <div className="text-slate-400">Enabled</div>
+                    <div className="mt-1 text-xl font-semibold text-white">{enabledCount}</div>
+                  </div>
+                  <div className="rounded-2xl bg-slate-800 p-3">
+                    <div className="text-slate-400">Published</div>
+                    <div className="mt-1 text-xl font-semibold text-white">{publishedCount}</div>
+                  </div>
                 </div>
               </div>
+            </div>
+
+            <div className="border-t border-slate-800 px-3 py-4">
+              <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em] text-slate-500">Account</div>
+              {bottomMenuItems.map((item) => (
+                <button
+                  key={item}
+                  className={`mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition ${
+                    item === "Sign Out"
+                      ? "text-rose-300 hover:bg-rose-950/40"
+                      : "text-slate-300 hover:bg-slate-900"
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
             </div>
           </div>
         </aside>
@@ -437,10 +514,9 @@ function GolfWebsiteAdminDashboard() {
         <main className="flex-1">
           <div className="flex flex-col gap-4 border-b border-slate-200 bg-white px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">{activeModule}</h1>
-              <p className="mt-1 text-sm text-slate-600">
-                Manage the website template system, structured page inputs, and mobile-first preview experience.
-              </p>
+              <div className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">{activeTopLevel}</div>
+              <h1 className="text-2xl font-bold tracking-tight">{activeModuleTitle}</h1>
+              <p className="mt-1 max-w-3xl text-sm text-slate-600">{activeModuleDescription}</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <button className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium shadow-sm">
