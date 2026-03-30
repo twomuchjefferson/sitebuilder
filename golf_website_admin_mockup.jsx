@@ -127,6 +127,23 @@ const flyoutNavItems = {
 
 const bottomMenuItems = ["Account", "Live Booking", "Support", "Sign Out"];
 
+const theme = {
+  background: "#f1f5f9",
+  ink: "#020618",
+  accent: "#432dd7",
+  white: "#ffffff",
+  border: "rgba(2, 6, 24, 0.12)",
+  muted: "rgba(2, 6, 24, 0.64)",
+  subtle: "rgba(2, 6, 24, 0.45)",
+  soft: "rgba(2, 6, 24, 0.08)",
+  softAccent: "rgba(67, 45, 215, 0.12)",
+  strongAccent: "rgba(67, 45, 215, 0.18)",
+  darkBorder: "rgba(241, 245, 249, 0.12)",
+  darkMuted: "rgba(241, 245, 249, 0.68)",
+  darkSubtle: "rgba(241, 245, 249, 0.45)",
+  darkHover: "rgba(241, 245, 249, 0.08)",
+};
+
 const topLevelDescriptions = {
   Dashboard: "Track portfolio activity, operational health, and recent website changes from one overview.",
   "Revenue Engine": "Monitor tee sheet conversion, offer performance, and pricing initiatives across the platform.",
@@ -153,13 +170,13 @@ const pageDescriptions = {
 
 function StatusPill({ status }) {
   const styles = {
-    Published: "bg-emerald-100 text-emerald-800",
-    Draft: "bg-amber-100 text-amber-800",
-    "Not Enabled": "bg-slate-100 text-slate-600",
+    Published: { backgroundColor: theme.softAccent, color: theme.accent },
+    Draft: { backgroundColor: theme.soft, color: theme.ink },
+    "Not Enabled": { backgroundColor: theme.soft, color: theme.subtle },
   };
 
   return (
-    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${styles[status] || styles.Draft}`}>
+    <span className="rounded-full px-3 py-1 text-xs font-semibold" style={styles[status] || styles.Draft}>
       {status}
     </span>
   );
@@ -169,22 +186,32 @@ function Toggle({ enabled, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`flex h-7 w-12 items-center rounded-full p-1 transition ${
-        enabled ? "justify-end bg-emerald-600" : "justify-start bg-slate-300"
-      }`}
+      className={`flex h-7 w-12 items-center rounded-full p-1 transition ${enabled ? "justify-end" : "justify-start"}`}
+      style={{ backgroundColor: enabled ? theme.accent : "rgba(2, 6, 24, 0.18)" }}
     >
-      <div className="h-5 w-5 rounded-full bg-white" />
+      <div className="h-5 w-5 rounded-full" style={{ backgroundColor: theme.white }} />
     </button>
   );
 }
 
 function SectionCard({ title, subtitle, right, children }) {
   return (
-    <section className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <section
+      className="rounded-3xl p-5 shadow-sm"
+      style={{
+        backgroundColor: theme.white,
+        boxShadow: "0 12px 32px rgba(2, 6, 24, 0.06)",
+        border: `1px solid ${theme.border}`,
+      }}
+    >
       <div className="mb-4 flex items-start justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold">{title}</h2>
-          {subtitle ? <p className="mt-1 text-sm text-slate-600">{subtitle}</p> : null}
+          {subtitle ? (
+            <p className="mt-1 text-sm" style={{ color: theme.muted }}>
+              {subtitle}
+            </p>
+          ) : null}
         </div>
         {right}
       </div>
@@ -196,16 +223,20 @@ function SectionCard({ title, subtitle, right, children }) {
 function TextField({ label, value, onChange, multiline = false }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-slate-800">{label}</span>
+      <span className="mb-2 block text-sm font-medium" style={{ color: theme.ink }}>
+        {label}
+      </span>
       {multiline ? (
         <textarea
-          className="min-h-[96px] w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-slate-900"
+          className="min-h-[96px] w-full rounded-2xl px-4 py-3 text-sm outline-none transition"
+          style={{ border: `1px solid ${theme.border}`, color: theme.ink }}
           value={value}
           onChange={onChange}
         />
       ) : (
         <input
-          className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-slate-900"
+          className="w-full rounded-2xl px-4 py-3 text-sm outline-none transition"
+          style={{ border: `1px solid ${theme.border}`, color: theme.ink }}
           value={value}
           onChange={onChange}
         />
@@ -217,9 +248,12 @@ function TextField({ label, value, onChange, multiline = false }) {
 function SelectField({ label, value, onChange, options }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-slate-800">{label}</span>
+      <span className="mb-2 block text-sm font-medium" style={{ color: theme.ink }}>
+        {label}
+      </span>
       <select
-        className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-slate-900"
+        className="w-full rounded-2xl px-4 py-3 text-sm outline-none transition"
+        style={{ border: `1px solid ${theme.border}`, color: theme.ink }}
         value={value}
         onChange={onChange}
       >
@@ -255,9 +289,12 @@ function MobilePreview({ activePage, brand, fields }) {
 
   return (
     <div className="flex justify-center">
-      <div className="w-[340px] rounded-[2.5rem] border-[10px] border-slate-950 bg-slate-950 p-2 shadow-2xl">
+      <div
+        className="w-[340px] rounded-[2.5rem] border-[10px] p-2 shadow-2xl"
+        style={{ borderColor: theme.ink, backgroundColor: theme.ink }}
+      >
         <div className="mb-2 flex justify-center">
-          <div className="h-1.5 w-20 rounded-full bg-slate-700" />
+          <div className="h-1.5 w-20 rounded-full" style={{ backgroundColor: theme.accent }} />
         </div>
         <div className="overflow-hidden rounded-[2rem] bg-white" style={{ fontFamily: brand.fontFamily }}>
           <div
@@ -273,10 +310,12 @@ function MobilePreview({ activePage, brand, fields }) {
               {activePage === "Home" ? fields.primaryCta : `Open ${activePage}`}
             </button>
           </div>
-          <div className="space-y-4 px-5 py-5 text-sm text-slate-600">
+          <div className="space-y-4 px-5 py-5 text-sm" style={{ color: theme.muted }}>
             {Object.entries(fields).slice(0, 3).map(([key, value]) => (
-              <div key={key} className="rounded-2xl bg-slate-50 p-4">
-                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{key}</div>
+              <div key={key} className="rounded-2xl p-4" style={{ backgroundColor: theme.background }}>
+                <div className="text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: theme.subtle }}>
+                  {key}
+                </div>
                 <div className="mt-2">{value}</div>
               </div>
             ))}
@@ -369,7 +408,7 @@ function GolfWebsiteAdminDashboard() {
   const [brand, setBrand] = useState({
     courseName: "Demo Golf Club",
     fontFamily: "'Inter', sans-serif",
-    accentColor: "#15803D",
+    accentColor: theme.accent,
     buttonTextColor: "#ffffff",
     logoName: "demo-logo.svg",
     heroBackground:
@@ -443,32 +482,45 @@ function GolfWebsiteAdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900">
+    <div className="min-h-screen" style={{ backgroundColor: theme.background, color: theme.ink }}>
       <div className="flex min-h-screen flex-col xl:flex-row">
-        <aside className="relative w-full border-b border-slate-200 bg-slate-950 text-white xl:w-72 xl:border-b-0 xl:border-r">
+        <aside
+          className="relative w-full border-b text-white xl:w-72 xl:border-b-0 xl:border-r"
+          style={{ backgroundColor: theme.ink, borderColor: theme.darkBorder }}
+        >
           <div className="flex h-full flex-col xl:min-h-screen">
             <div className="p-5">
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500 text-sm font-bold text-slate-950">
+                <div
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl text-sm font-bold"
+                  style={{ backgroundColor: theme.accent, color: theme.white }}
+                >
                   GB
                 </div>
                 <div>
-                  <div className="text-sm text-slate-400">Website Builder</div>
+                  <div className="text-sm" style={{ color: theme.darkSubtle }}>
+                    Website Builder
+                  </div>
                   <div className="text-lg font-semibold">GolfBack Admin</div>
                 </div>
               </div>
             </div>
 
             <nav className="px-3">
-              <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em] text-slate-500">Platform</div>
+              <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em]" style={{ color: theme.darkSubtle }}>
+                Platform
+              </div>
               {topLevelNavItems.map((item) => (
                 <button
                   key={item}
                   onClick={() => selectTopLevelItem(item)}
-                  className={`mb-2 flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm transition ${
-                    activeTopLevel === item ? "bg-white text-slate-950 shadow" : "text-slate-300 hover:bg-slate-900"
-                  }`}
-                >
+                  className="mb-2 flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm transition"
+                  style={
+                    activeTopLevel === item
+                      ? { backgroundColor: theme.background, color: theme.ink, boxShadow: "0 10px 30px rgba(2, 6, 24, 0.25)" }
+                      : { color: theme.darkMuted }
+                  }
+                  >
                   <span>{item}</span>
                   {flyoutNavItems[item] ? <span className="text-xs">{activeTopLevel === item ? "Open" : "Flyout"}</span> : null}
                 </button>
@@ -476,18 +528,28 @@ function GolfWebsiteAdminDashboard() {
             </nav>
 
             {hasActiveFlyout ? (
-              <div className="border-t border-slate-800 px-3 py-4 xl:absolute xl:left-[calc(100%-0.75rem)] xl:top-24 xl:z-20 xl:w-64 xl:rounded-3xl xl:border xl:border-slate-800 xl:bg-slate-950 xl:p-3 xl:shadow-2xl">
+              <div
+                className="border-t px-3 py-4 xl:absolute xl:left-[calc(100%-0.75rem)] xl:top-24 xl:z-20 xl:w-64 xl:rounded-3xl xl:border xl:p-3 xl:shadow-2xl"
+                style={{ borderColor: theme.darkBorder, backgroundColor: theme.ink }}
+              >
                 <div className="mb-3 px-2">
-                  <div className="text-xs uppercase tracking-[0.24em] text-slate-500">{activeTopLevel}</div>
-                  <div className="mt-1 text-sm text-slate-400">Secondary Flyout Menu</div>
+                  <div className="text-xs uppercase tracking-[0.24em]" style={{ color: theme.darkSubtle }}>
+                    {activeTopLevel}
+                  </div>
+                  <div className="mt-1 text-sm" style={{ color: theme.darkMuted }}>
+                    Secondary Flyout Menu
+                  </div>
                 </div>
                 {activeFlyoutItems.map((item) => (
                   <button
                     key={item}
                     onClick={() => selectFlyoutItem(item)}
-                    className={`mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition ${
-                      activeNestedItem === item ? "bg-emerald-500 font-semibold text-slate-950" : "bg-slate-900 text-slate-200 hover:bg-slate-800"
-                    }`}
+                    className="mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition"
+                    style={
+                      activeNestedItem === item
+                        ? { backgroundColor: theme.accent, color: theme.white, fontWeight: 600 }
+                        : { backgroundColor: "rgba(241, 245, 249, 0.06)", color: theme.darkMuted }
+                    }
                   >
                     {item}
                   </button>
@@ -497,16 +559,18 @@ function GolfWebsiteAdminDashboard() {
 
             <div className={`flex-1 ${hasActiveFlyout ? "xl:pb-60" : ""}`} />
 
-            <div className="border-t border-slate-800 px-3 py-4 xl:sticky xl:bottom-0 xl:mt-auto xl:bg-slate-950">
-              <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em] text-slate-500">Account</div>
+            <div
+              className="border-t px-3 py-4 xl:sticky xl:bottom-0 xl:mt-auto"
+              style={{ borderColor: theme.darkBorder, backgroundColor: theme.ink }}
+            >
+              <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em]" style={{ color: theme.darkSubtle }}>
+                Account
+              </div>
               {bottomMenuItems.map((item) => (
                 <button
                   key={item}
-                  className={`mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition ${
-                    item === "Sign Out"
-                      ? "text-rose-300 hover:bg-rose-950/40"
-                      : "text-slate-300 hover:bg-slate-900"
-                  }`}
+                  className="mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition"
+                  style={item === "Sign Out" ? { color: theme.accent } : { color: theme.darkMuted }}
                 >
                   {item}
                 </button>
@@ -516,17 +580,30 @@ function GolfWebsiteAdminDashboard() {
         </aside>
 
         <main className="flex-1">
-          <div className="flex flex-col gap-4 border-b border-slate-200 bg-white px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+          <div
+            className="flex flex-col gap-4 border-b px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between"
+            style={{ backgroundColor: theme.white, borderColor: theme.border }}
+          >
             <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">{activeTopLevel}</div>
+              <div className="text-xs font-semibold uppercase tracking-[0.22em]" style={{ color: theme.subtle }}>
+                {activeTopLevel}
+              </div>
               <h1 className="text-2xl font-bold tracking-tight">{activeModuleTitle}</h1>
-              <p className="mt-1 max-w-3xl text-sm text-slate-600">{activeModuleDescription}</p>
+              <p className="mt-1 max-w-3xl text-sm" style={{ color: theme.muted }}>
+                {activeModuleDescription}
+              </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <button className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium shadow-sm">
+              <button
+                className="rounded-2xl px-4 py-2 text-sm font-medium shadow-sm"
+                style={{ border: `1px solid ${theme.border}`, backgroundColor: theme.white, color: theme.ink }}
+              >
                 Save Draft
               </button>
-              <button className="rounded-2xl bg-slate-950 px-4 py-2 text-sm font-medium text-white shadow-sm">
+              <button
+                className="rounded-2xl px-4 py-2 text-sm font-medium text-white shadow-sm"
+                style={{ backgroundColor: theme.accent, color: theme.white }}
+              >
                 Publish Changes
               </button>
             </div>
@@ -537,7 +614,14 @@ function GolfWebsiteAdminDashboard() {
               <SectionCard
                 title="Brand Settings"
                 subtitle="Control the global visual system used by the standardized templates."
-                right={<span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Theme Ready</span>}
+                right={
+                  <span
+                    className="rounded-full px-3 py-1 text-xs font-semibold"
+                    style={{ backgroundColor: theme.softAccent, color: theme.accent }}
+                  >
+                    Theme Ready
+                  </span>
+                }
               >
                 <div className="grid gap-4 md:grid-cols-2">
                   <TextField label="Course name" value={brand.courseName} onChange={(e) => setBrand((b) => ({ ...b, courseName: e.target.value }))} />
@@ -557,23 +641,37 @@ function GolfWebsiteAdminDashboard() {
               <SectionCard
                 title="Website Pages"
                 subtitle="Enable pages, jump into their settings, and control page-level status."
-                right={<span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">Clickable Navigation</span>}
+                right={
+                  <span
+                    className="rounded-full px-3 py-1 text-xs font-semibold"
+                    style={{ backgroundColor: theme.soft, color: theme.muted }}
+                  >
+                    Clickable Navigation
+                  </span>
+                }
               >
                 <div className="grid gap-3 lg:grid-cols-2">
                   {Object.entries(pages).map(([pageName, data]) => (
                     <div
                       key={pageName}
-                      className={`rounded-3xl border p-4 transition ${
-                        activePage === pageName ? "border-slate-900 bg-slate-50" : "border-slate-200 bg-white"
-                      }`}
+                      className="rounded-3xl border p-4 transition"
+                      style={
+                        activePage === pageName
+                          ? { borderColor: theme.accent, backgroundColor: theme.softAccent }
+                          : { borderColor: theme.border, backgroundColor: theme.white }
+                      }
                     >
                       <div className="flex items-start justify-between gap-3">
                         <button className="text-left" onClick={() => setActivePage(pageName)}>
                           <div className="text-lg font-semibold">
-                            <span className="mr-2 text-xs text-slate-400">{data.icon}</span>
+                            <span className="mr-2 text-xs" style={{ color: theme.subtle }}>
+                              {data.icon}
+                            </span>
                             {pageName}
                           </div>
-                          <div className="mt-1 text-sm text-slate-500">{pageDescriptions[pageName]}</div>
+                          <div className="mt-1 text-sm" style={{ color: theme.muted }}>
+                            {pageDescriptions[pageName]}
+                          </div>
                         </button>
                         <Toggle enabled={data.enabled} onClick={() => togglePage(pageName)} />
                       </div>
@@ -581,14 +679,16 @@ function GolfWebsiteAdminDashboard() {
                         <StatusPill status={data.status} />
                         <button
                           onClick={() => setActivePage(pageName)}
-                          className="rounded-full border border-slate-300 px-3 py-1 text-xs font-medium"
+                          className="rounded-full px-3 py-1 text-xs font-medium"
+                          style={{ border: `1px solid ${theme.border}` }}
                         >
                           Edit Page
                         </button>
                         {data.enabled ? (
                           <button
                             onClick={() => setPageStatus(pageName, data.status === "Published" ? "Draft" : "Published")}
-                            className="rounded-full border border-slate-300 px-3 py-1 text-xs font-medium"
+                            className="rounded-full px-3 py-1 text-xs font-medium"
+                            style={{ border: `1px solid ${theme.border}` }}
                           >
                             {data.status === "Published" ? "Move to Draft" : "Publish Page"}
                           </button>
@@ -605,17 +705,26 @@ function GolfWebsiteAdminDashboard() {
                 right={<StatusPill status={activePageData.status} />}
               >
                 {!activePageData.enabled ? (
-                  <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-6 text-sm text-slate-600">
+                  <div
+                    className="rounded-3xl border border-dashed p-6 text-sm"
+                    style={{ borderColor: theme.border, backgroundColor: theme.background, color: theme.muted }}
+                  >
                     This page is currently disabled. Turn it on in Website Pages to activate its template and content inputs.
                   </div>
                 ) : (
                   <>
                     <PageFieldEditor activePage={activePage} pageData={activePageData} onFieldChange={updatePageField} />
                     <div className="mt-5 flex flex-wrap gap-3">
-                      <button className="rounded-2xl bg-slate-950 px-4 py-2 text-sm font-medium text-white">
+                      <button
+                        className="rounded-2xl px-4 py-2 text-sm font-medium text-white"
+                        style={{ backgroundColor: theme.accent, color: theme.white }}
+                      >
                         Generate {activePage} Page
                       </button>
-                      <button className="rounded-2xl border border-slate-300 px-4 py-2 text-sm font-medium">
+                      <button
+                        className="rounded-2xl px-4 py-2 text-sm font-medium"
+                        style={{ border: `1px solid ${theme.border}` }}
+                      >
                         View AI Inputs
                       </button>
                     </div>
@@ -626,12 +735,21 @@ function GolfWebsiteAdminDashboard() {
               <SectionCard
                 title="Weekly SEO and AI Optimization Agent"
                 subtitle="The agent scans content quality, local consistency, schema coverage, and internal linking opportunities."
-                right={<span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">Next Scan: Sunday 2:00 AM</span>}
+                right={
+                  <span
+                    className="rounded-full px-3 py-1 text-xs font-semibold"
+                    style={{ backgroundColor: theme.softAccent, color: theme.accent }}
+                  >
+                    Next Scan: Sunday 2:00 AM
+                  </span>
+                }
               >
                 <div className="grid gap-4 xl:grid-cols-[0.8fr_1.2fr]">
-                  <div className="rounded-3xl bg-slate-50 p-4">
-                    <div className="text-sm font-semibold text-slate-800">Focus Areas</div>
-                    <div className="mt-3 space-y-2 text-sm text-slate-600">
+                  <div className="rounded-3xl p-4" style={{ backgroundColor: theme.background }}>
+                    <div className="text-sm font-semibold" style={{ color: theme.ink }}>
+                      Focus Areas
+                    </div>
+                    <div className="mt-3 space-y-2 text-sm" style={{ color: theme.muted }}>
                       <div>Search visibility</div>
                       <div>AI-answer readiness</div>
                       <div>Business Scanner consistency</div>
@@ -640,12 +758,24 @@ function GolfWebsiteAdminDashboard() {
                   </div>
                   <div className="space-y-3">
                     {auditItems.map((item) => (
-                      <div key={item.title} className="rounded-3xl border border-slate-200 bg-white p-4">
+                      <div key={item.title} className="rounded-3xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">{item.type}</span>
-                          <span className="rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700">{item.priority}</span>
+                          <span
+                            className="rounded-full px-3 py-1 text-xs font-semibold"
+                            style={{ backgroundColor: theme.soft, color: theme.ink }}
+                          >
+                            {item.type}
+                          </span>
+                          <span
+                            className="rounded-full px-3 py-1 text-xs font-semibold"
+                            style={{ backgroundColor: theme.softAccent, color: theme.accent }}
+                          >
+                            {item.priority}
+                          </span>
                         </div>
-                        <div className="mt-3 text-sm text-slate-700">{item.title}</div>
+                        <div className="mt-3 text-sm" style={{ color: theme.ink }}>
+                          {item.title}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -657,21 +787,25 @@ function GolfWebsiteAdminDashboard() {
               <SectionCard
                 title="Live Mobile Preview"
                 subtitle="See the active page render in a mobile-first layout using your template system and current inputs."
-                right={<div className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">iPhone Width</div>}
+                right={
+                  <div className="rounded-full px-3 py-1 text-xs font-medium" style={{ backgroundColor: theme.soft, color: theme.muted }}>
+                    iPhone Width
+                  </div>
+                }
               >
                 <MobilePreview activePage={activePage} brand={brand} fields={activePageData.fields} />
               </SectionCard>
 
               <SectionCard title="Publish Workflow" subtitle="An example of how this app could guide operators from input to live website.">
-                <div className="space-y-3 text-sm text-slate-600">
+                <div className="space-y-3 text-sm" style={{ color: theme.muted }}>
                   {[
                     "1. Operator enables the page they want on the website.",
                     "2. Structured inputs replace open-ended page building.",
                     "3. AI applies approved templates, brand settings, and images.",
                     "4. Team reviews the live mobile preview before publishing.",
-                    "5. Weekly audits suggest ranking, AI, and GBP improvements.",
+                    "5. Weekly audits suggest ranking, AI, and Business Scanner improvements.",
                   ].map((step) => (
-                    <div key={step} className="rounded-2xl bg-slate-50 px-4 py-3">
+                    <div key={step} className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>
                       {step}
                     </div>
                   ))}
@@ -679,10 +813,10 @@ function GolfWebsiteAdminDashboard() {
               </SectionCard>
 
               <SectionCard title="Prototype Notes" subtitle="This version is ready to demo visually and can be hosted on GitHub Pages.">
-                <div className="space-y-3 text-sm text-slate-600">
-                  <div className="rounded-2xl bg-slate-50 px-4 py-3">Single-file React prototype for quick sharing with your team.</div>
-                  <div className="rounded-2xl bg-slate-50 px-4 py-3">Clickable page navigation and editable page-level inputs.</div>
-                  <div className="rounded-2xl bg-slate-50 px-4 py-3">Good next step: connect this UI to JSON page schemas and an AI generation service.</div>
+                <div className="space-y-3 text-sm" style={{ color: theme.muted }}>
+                  <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>Single-file React prototype for quick sharing with your team.</div>
+                  <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>Clickable page navigation and editable page-level inputs.</div>
+                  <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>Good next step: connect this UI to JSON page schemas and an AI generation service.</div>
                 </div>
               </SectionCard>
             </div>
