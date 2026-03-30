@@ -104,17 +104,24 @@ const topLevelNavItems = [
   "Marketing",
   "Website Admin",
   "AI Chat",
-  "Google Business Profile",
+  "Business Scanner",
   "Help",
 ];
 
-const websiteAdminNavItems = [
-  "Brand Settings",
-  "Page Controls",
-  "AI Content Engine",
-  "SEO and AI Audit",
-  "Publishing",
-];
+const flyoutNavItems = {
+  "Revenue Engine": [
+    "Booking Engine",
+    "Smart Pricing AI",
+    "Promo Codes",
+    "Gift Cards",
+    "Wait List",
+    "Lottery",
+    "Checkout Upsells",
+  ],
+  Marketing: ["Automation", "Campaigns", "Email Marketing", "Contacts", "Segments"],
+  "Website Admin": ["Brand Settings", "Page Controls", "AI Content Engine", "SEO and AI Audit", "Publishing"],
+  "AI Chat": ["Chat History", "Official Answers", "FAQ Builder", "Chat Flows", "Settings"],
+};
 
 const bottomMenuItems = ["Account", "Live Booking", "Support", "Sign Out"];
 
@@ -124,7 +131,7 @@ const topLevelDescriptions = {
   Marketing: "Coordinate campaigns, audience segments, and content workflows tied to golf course growth.",
   "Website Admin": "Manage brand settings, page controls, AI content generation, audits, and publishing.",
   "AI Chat": "Review AI-assisted recommendations, request updates, and coordinate with guided workflows.",
-  "Google Business Profile":
+  "Business Scanner":
     "Monitor local listing consistency, reviews, business details, and location-level optimization tasks.",
   Help: "Browse walkthroughs, support resources, and product guidance for your operating team.",
 };
@@ -349,7 +356,12 @@ function GolfWebsiteAdminDashboard() {
   const [pages, setPages] = useState(initialPages);
   const [activePage, setActivePage] = useState("Membership");
   const [activeTopLevel, setActiveTopLevel] = useState("Website Admin");
-  const [activeWebsiteAdminItem, setActiveWebsiteAdminItem] = useState("Page Controls");
+  const [activeFlyoutSelections, setActiveFlyoutSelections] = useState({
+    "Revenue Engine": "Booking Engine",
+    Marketing: "Automation",
+    "Website Admin": "Page Controls",
+    "AI Chat": "Chat History",
+  });
   const [brand, setBrand] = useState({
     courseName: "Demo Golf Club",
     fontFamily: "'Inter', sans-serif",
@@ -362,17 +374,19 @@ function GolfWebsiteAdminDashboard() {
   const [auditItems] = useState([
     { title: "Add stronger FAQ coverage to Membership page", type: "Content", priority: "High" },
     { title: "Improve internal links from Home to Outings and Membership", type: "SEO", priority: "Medium" },
-    { title: "Check Google Business Profile phone and hours consistency", type: "Local", priority: "High" },
+    { title: "Check Business Scanner phone and hours consistency", type: "Local", priority: "High" },
     { title: "Add schema enhancements for organization, local business, and FAQ", type: "Structured Data", priority: "Medium" },
   ]);
 
   const enabledCount = useMemo(() => Object.values(pages).filter((page) => page.enabled).length, [pages]);
   const publishedCount = useMemo(() => Object.values(pages).filter((page) => page.status === "Published").length, [pages]);
   const activePageData = pages[activePage];
-  const isWebsiteAdminActive = activeTopLevel === "Website Admin";
-  const activeModuleTitle = isWebsiteAdminActive ? activeWebsiteAdminItem : activeTopLevel;
-  const activeModuleDescription = isWebsiteAdminActive
-    ? `${topLevelDescriptions["Website Admin"]} Secondary navigation is mocked in the flyout menu.`
+  const activeFlyoutItems = flyoutNavItems[activeTopLevel] || [];
+  const hasActiveFlyout = activeFlyoutItems.length > 0;
+  const activeNestedItem = hasActiveFlyout ? activeFlyoutSelections[activeTopLevel] : null;
+  const activeModuleTitle = activeNestedItem || activeTopLevel;
+  const activeModuleDescription = hasActiveFlyout
+    ? `${topLevelDescriptions[activeTopLevel]} Secondary navigation is mocked in the flyout menu.`
     : `${topLevelDescriptions[activeTopLevel]} The main canvas remains focused on Website Admin tools in this prototype.`;
 
   const updatePageField = (fieldName, value) => {
@@ -419,9 +433,11 @@ function GolfWebsiteAdminDashboard() {
     setActiveTopLevel(item);
   };
 
-  const selectWebsiteAdminItem = (item) => {
-    setActiveTopLevel("Website Admin");
-    setActiveWebsiteAdminItem(item);
+  const selectFlyoutItem = (item) => {
+    setActiveFlyoutSelections((prev) => ({
+      ...prev,
+      [activeTopLevel]: item,
+    }));
   };
 
   return (
@@ -452,23 +468,23 @@ function GolfWebsiteAdminDashboard() {
                   }`}
                 >
                   <span>{item}</span>
-                  {item === "Website Admin" ? <span className="text-xs">{isWebsiteAdminActive ? "Open" : "Flyout"}</span> : null}
+                  {flyoutNavItems[item] ? <span className="text-xs">{activeTopLevel === item ? "Open" : "Flyout"}</span> : null}
                 </button>
               ))}
             </nav>
 
-            {isWebsiteAdminActive ? (
+            {hasActiveFlyout ? (
               <div className="border-t border-slate-800 px-3 py-4 xl:absolute xl:left-[calc(100%-0.75rem)] xl:top-24 xl:z-20 xl:w-64 xl:rounded-3xl xl:border xl:border-slate-800 xl:bg-slate-950 xl:p-3 xl:shadow-2xl">
                 <div className="mb-3 px-2">
-                  <div className="text-xs uppercase tracking-[0.24em] text-slate-500">Website Admin</div>
+                  <div className="text-xs uppercase tracking-[0.24em] text-slate-500">{activeTopLevel}</div>
                   <div className="mt-1 text-sm text-slate-400">Secondary Flyout Menu</div>
                 </div>
-                {websiteAdminNavItems.map((item) => (
+                {activeFlyoutItems.map((item) => (
                   <button
                     key={item}
-                    onClick={() => selectWebsiteAdminItem(item)}
+                    onClick={() => selectFlyoutItem(item)}
                     className={`mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition ${
-                      activeWebsiteAdminItem === item ? "bg-emerald-500 font-semibold text-slate-950" : "bg-slate-900 text-slate-200 hover:bg-slate-800"
+                      activeNestedItem === item ? "bg-emerald-500 font-semibold text-slate-950" : "bg-slate-900 text-slate-200 hover:bg-slate-800"
                     }`}
                   >
                     {item}
@@ -477,7 +493,7 @@ function GolfWebsiteAdminDashboard() {
               </div>
             ) : null}
 
-            <div className={`mt-2 flex-1 px-3 pb-4 ${isWebsiteAdminActive ? "xl:mt-0 xl:pt-60" : ""}`}>
+            <div className={`mt-2 flex-1 px-3 pb-4 ${hasActiveFlyout ? "xl:mt-0 xl:pt-60" : ""}`}>
               <div className="rounded-3xl bg-slate-900 p-4">
                 <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Project Snapshot</div>
                 <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
@@ -630,7 +646,7 @@ function GolfWebsiteAdminDashboard() {
                     <div className="mt-3 space-y-2 text-sm text-slate-600">
                       <div>Search visibility</div>
                       <div>AI-answer readiness</div>
-                      <div>Google Business Profile consistency</div>
+                      <div>Business Scanner consistency</div>
                       <div>Internal links and schema opportunities</div>
                     </div>
                   </div>
