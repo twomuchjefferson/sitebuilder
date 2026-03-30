@@ -1,4 +1,4 @@
-const { useMemo, useState } = React;
+const { useState } = React;
 
 const initialPages = {
   Home: {
@@ -104,6 +104,7 @@ const topLevelNavItems = [
   "Marketing",
   "Website Admin",
   "AI Chat",
+  "Reports",
   "Business Scanner",
   "Help",
 ];
@@ -121,6 +122,7 @@ const flyoutNavItems = {
   Marketing: ["Automation", "Campaigns", "Email Marketing", "Contacts", "Segments"],
   "Website Admin": ["Brand Settings", "Page Controls", "AI Content Engine", "SEO and AI Audit", "Publishing"],
   "AI Chat": ["Chat History", "Official Answers", "FAQ Builder", "Chat Flows", "Settings"],
+  Reports: ["Booking", "Website", "Marketing", "Search", "Ads"],
 };
 
 const bottomMenuItems = ["Account", "Live Booking", "Support", "Sign Out"];
@@ -131,6 +133,7 @@ const topLevelDescriptions = {
   Marketing: "Coordinate campaigns, audience segments, and content workflows tied to golf course growth.",
   "Website Admin": "Manage brand settings, page controls, AI content generation, audits, and publishing.",
   "AI Chat": "Review AI-assisted recommendations, request updates, and coordinate with guided workflows.",
+  Reports: "Review performance reporting across bookings, website activity, marketing, search, and ads.",
   "Business Scanner":
     "Monitor local listing consistency, reviews, business details, and location-level optimization tasks.",
   Help: "Browse walkthroughs, support resources, and product guidance for your operating team.",
@@ -361,6 +364,7 @@ function GolfWebsiteAdminDashboard() {
     Marketing: "Automation",
     "Website Admin": "Page Controls",
     "AI Chat": "Chat History",
+    Reports: "Booking",
   });
   const [brand, setBrand] = useState({
     courseName: "Demo Golf Club",
@@ -378,8 +382,6 @@ function GolfWebsiteAdminDashboard() {
     { title: "Add schema enhancements for organization, local business, and FAQ", type: "Structured Data", priority: "Medium" },
   ]);
 
-  const enabledCount = useMemo(() => Object.values(pages).filter((page) => page.enabled).length, [pages]);
-  const publishedCount = useMemo(() => Object.values(pages).filter((page) => page.status === "Published").length, [pages]);
   const activePageData = pages[activePage];
   const activeFlyoutItems = flyoutNavItems[activeTopLevel] || [];
   const hasActiveFlyout = activeFlyoutItems.length > 0;
@@ -493,23 +495,9 @@ function GolfWebsiteAdminDashboard() {
               </div>
             ) : null}
 
-            <div className={`mt-2 flex-1 px-3 pb-4 ${hasActiveFlyout ? "xl:mt-0 xl:pt-60" : ""}`}>
-              <div className="rounded-3xl bg-slate-900 p-4">
-                <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Project Snapshot</div>
-                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                  <div className="rounded-2xl bg-slate-800 p-3">
-                    <div className="text-slate-400">Enabled</div>
-                    <div className="mt-1 text-xl font-semibold text-white">{enabledCount}</div>
-                  </div>
-                  <div className="rounded-2xl bg-slate-800 p-3">
-                    <div className="text-slate-400">Published</div>
-                    <div className="mt-1 text-xl font-semibold text-white">{publishedCount}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div className={`flex-1 ${hasActiveFlyout ? "xl:pb-60" : ""}`} />
 
-            <div className="border-t border-slate-800 px-3 py-4">
+            <div className="border-t border-slate-800 px-3 py-4 xl:sticky xl:bottom-0 xl:mt-auto xl:bg-slate-950">
               <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em] text-slate-500">Account</div>
               {bottomMenuItems.map((item) => (
                 <button
