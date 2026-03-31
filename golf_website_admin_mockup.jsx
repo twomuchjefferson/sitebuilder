@@ -1093,10 +1093,140 @@ function NestedModuleWorkspace({ config }) {
   );
 }
 
+function DashboardWorkspace() {
+  const overviewCards = [
+    { label: "Total Revenue", value: "$218,420", delta: "+6.2% vs last month" },
+    { label: "Rounds Booked", value: "1,482", delta: "+9.4% vs last month" },
+    { label: "Marketing ROAS", value: "4.8x", delta: "+0.6 vs last month" },
+    { label: "Business Scanner Score", value: "91", delta: "+3 point lift" },
+  ];
+  const funnelSteps = [
+    { label: "Website Visitors", value: "24.7K", width: "100%" },
+    { label: "Booking Intent", value: "6.3K", width: "76%" },
+    { label: "Checkout Started", value: "2.1K", width: "52%" },
+    { label: "Completed Bookings", value: "1.4K", width: "34%" },
+  ];
+  const modules = [
+    { title: "Revenue Engine", detail: "Booking Engine and Smart Pricing AI are driving the biggest lift this week.", value: "$38.4K" },
+    { title: "Marketing", detail: "Automation and email are producing the strongest replay booking influence.", value: "248 net new contacts" },
+    { title: "AI Chat", detail: "Official Answers coverage improved confidence on booking and membership flows.", value: "82% resolved" },
+    { title: "Business Scanner", detail: "Listing accuracy remains high, with a few response SLA alerts still open.", value: "4 fixes needed" },
+  ];
+  const activities = [
+    "Smart Pricing AI raised Saturday morning rates by 9% based on sell-through.",
+    "Spring Kickoff campaign launched across email, homepage hero, and paid search.",
+    "Business Scanner flagged one listing with mismatched holiday hours.",
+    "AI Chat approved a new rain-check policy answer for guest support.",
+  ];
+
+  return (
+    <div className="space-y-6 p-4 sm:p-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {overviewCards.map((card) => (
+          <SectionCard key={card.label} title={card.label} subtitle={card.delta}>
+            <div className="text-3xl font-bold">{card.value}</div>
+          </SectionCard>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[1.2fr_0.8fr]">
+        <SectionCard
+          title="Performance Snapshot"
+          subtitle="A blended view of booking, website, and growth momentum inspired by analytics-style dashboards."
+          right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.muted }}>Last 30 Days</span>}
+        >
+          <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+            <div className="rounded-3xl border p-5" style={{ borderColor: theme.border, backgroundColor: theme.background }}>
+              <div className="flex items-end justify-between gap-4">
+                <div>
+                  <div className="text-sm font-medium" style={{ color: theme.subtle }}>Revenue + Traffic Trend</div>
+                  <div className="mt-2 text-2xl font-semibold">$72.8K Influenced</div>
+                </div>
+                <div className="text-sm" style={{ color: theme.muted }}>Booking, web, and campaign blended view</div>
+              </div>
+              <div className="mt-6 flex h-52 items-end gap-3">
+                {[42, 55, 51, 68, 73, 66, 84, 79, 92, 88, 96, 90].map((height, index) => (
+                  <div key={index} className="flex-1 rounded-t-2xl" style={{ height: `${height}%`, backgroundColor: index % 3 === 0 ? theme.accent : theme.softAccent }} />
+                ))}
+              </div>
+              <div className="mt-4 flex justify-between text-xs" style={{ color: theme.subtle }}>
+                {["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map((month) => (
+                  <span key={month}>{month}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="rounded-3xl border p-5" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+                <div className="text-sm font-medium" style={{ color: theme.subtle }}>User Growth</div>
+                <div className="mt-2 text-3xl font-bold">3,768</div>
+                <div className="mt-2 text-sm" style={{ color: theme.muted }}>New signups across website, widget, and local funnels.</div>
+              </div>
+              <div className="rounded-3xl border p-5" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+                <div className="text-sm font-medium" style={{ color: theme.subtle }}>Churn Risk</div>
+                <div className="mt-2 text-3xl font-bold">4.26%</div>
+                <div className="mt-2 text-sm" style={{ color: theme.muted }}>Downgrade-to-free style benchmark adapted to lapsed golfers and quiet segments.</div>
+              </div>
+            </div>
+          </div>
+        </SectionCard>
+
+        <SectionCard title="Conversion Funnel" subtitle="Website to checkout progression across the booking path.">
+          <div className="space-y-4">
+            {funnelSteps.map((step) => (
+              <div key={step.label}>
+                <div className="mb-2 flex items-center justify-between text-sm">
+                  <span style={{ color: theme.ink }}>{step.label}</span>
+                  <span style={{ color: theme.muted }}>{step.value}</span>
+                </div>
+                <div className="h-3 rounded-full" style={{ backgroundColor: theme.soft }}>
+                  <div className="h-3 rounded-full" style={{ width: step.width, backgroundColor: theme.accent }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[1fr_1fr]">
+        <SectionCard title="Module Health" subtitle="A creative rollup of the main workspaces inside this admin portal.">
+          <div className="grid gap-3">
+            {modules.map((module) => (
+              <div key={module.title} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <div className="font-semibold">{module.title}</div>
+                    <div className="mt-1 text-sm" style={{ color: theme.muted }}>{module.detail}</div>
+                  </div>
+                  <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.accent }}>
+                    {module.value}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+
+        <SectionCard title="Recent Activity" subtitle="A SaaS-style activity stream for operators and AI systems.">
+          <div className="space-y-3">
+            {activities.map((item, index) => (
+              <div key={item} className="flex gap-3 rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+                <div className="mt-1 h-3 w-3 rounded-full" style={{ backgroundColor: index % 2 === 0 ? theme.accent : theme.softAccent }} />
+                <div className="text-sm" style={{ color: theme.muted }}>{item}</div>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+      </div>
+    </div>
+  );
+}
+
 function GolfWebsiteAdminDashboard() {
   const [pages, setPages] = useState(initialPages);
   const [activePage, setActivePage] = useState("Membership");
   const [activeTopLevel, setActiveTopLevel] = useState("Dashboard");
+  const [expandedTopLevel, setExpandedTopLevel] = useState(null);
   const [activeBookingEngineTab, setActiveBookingEngineTab] = useState("Setup");
   const [activeFlyoutSelections, setActiveFlyoutSelections] = useState({
     "Revenue Engine": "Booking Engine",
@@ -1178,7 +1308,15 @@ function GolfWebsiteAdminDashboard() {
   };
 
   const selectTopLevelItem = (item) => {
+    const hasChildren = Boolean(flyoutNavItems[item]);
+
     setActiveTopLevel(item);
+
+    if (hasChildren) {
+      setExpandedTopLevel((prev) => (prev === item ? null : item));
+    } else {
+      setExpandedTopLevel(null);
+    }
   };
 
   const selectFlyoutItem = (item) => {
@@ -1194,6 +1332,7 @@ function GolfWebsiteAdminDashboard() {
       ...prev,
       [activeTopLevel]: item,
     }));
+    setExpandedTopLevel(activeTopLevel);
   };
 
   const handleBookingEngineTabChange = (tab) => {
@@ -1234,6 +1373,7 @@ function GolfWebsiteAdminDashboard() {
               {topLevelNavItems.map((item) => {
                 const hasChildren = Boolean(flyoutNavItems[item]);
                 const isActive = activeTopLevel === item;
+                const isExpanded = expandedTopLevel === item;
 
                 return (
                   <div key={item} className="mb-2">
@@ -1255,13 +1395,13 @@ function GolfWebsiteAdminDashboard() {
                         </span>
                         <span>{item}</span>
                       </span>
-                      {hasChildren ? <ChevronIcon open={isActive} /> : null}
+                      {hasChildren ? <ChevronIcon open={isExpanded} /> : null}
                     </button>
 
                     {hasChildren ? (
                       <div
                         className={`overflow-hidden transition-all duration-300 ease-out ${
-                          isActive ? "mt-2 max-h-96 opacity-100" : "max-h-0 opacity-0"
+                          isExpanded ? "mt-2 max-h-96 opacity-100" : "max-h-0 opacity-0"
                         }`}
                       >
                         <div className="space-y-2 px-3 py-1">
@@ -1339,7 +1479,9 @@ function GolfWebsiteAdminDashboard() {
             </div>
           </div>
 
-          {isBookingEngineView ? (
+          {activeTopLevel === "Dashboard" ? (
+            <DashboardWorkspace />
+          ) : isBookingEngineView ? (
             <BookingEngineWorkspace activeTab={activeBookingEngineTab} onTabChange={handleBookingEngineTabChange} />
           ) : isRevenueEngineModuleView ? (
             <RevenueEngineModuleWorkspace module={activeNestedItem} />
