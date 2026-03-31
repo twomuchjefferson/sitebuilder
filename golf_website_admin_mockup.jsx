@@ -1419,6 +1419,177 @@ function SettingsWorkspace({ activeTab, onTabChange }) {
   );
 }
 
+function SupportWorkspace() {
+  const thread = [
+    { author: "Jordan Mills", role: "Course Operator", time: "Today, 9:18 AM", body: "We need help updating the booking confirmation wording for replay offers and weather delays." },
+    { author: "GolfBack Support", role: "Support Team", time: "Today, 9:42 AM", body: "We can help with that. Please confirm whether the messaging should apply to website, widget, and call-center bookings." },
+    { author: "Jordan Mills", role: "Course Operator", time: "Today, 10:01 AM", body: "Yes, and we want a separate note for twilight rounds that may be shortened by daylight." },
+  ];
+  const details = [
+    ["Customer", "Jordan Mills"],
+    ["Email", "jordan@golfcourse.com"],
+    ["Ticket ID", "#GB-20481"],
+    ["Category", "Booking Engine"],
+    ["Status", "In Progress"],
+  ];
+
+  return (
+    <div className="space-y-6 p-4 sm:p-6">
+      <div className="grid gap-6 2xl:grid-cols-[0.95fr_1.05fr]">
+        <SectionCard
+          title="Support Request"
+          subtitle="A TailAdmin-style form layout adapted for admin support intake."
+          right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.ink }}>Priority Queue</span>}
+        >
+          <div className="grid gap-4 md:grid-cols-2">
+            <TextField label="First Name" value="Jordan" onChange={() => {}} />
+            <TextField label="Last Name" value="Mills" onChange={() => {}} />
+            <TextField label="Email" value="jordan@golfcourse.com" onChange={() => {}} />
+            <TextField label="Subject" value="Update booking confirmation messages" onChange={() => {}} />
+            <SelectField label="Category" value="Booking Engine" onChange={() => {}} options={["Booking Engine", "Marketing", "AI Chat", "Billing"]} />
+            <SelectField label="Priority" value="High" onChange={() => {}} options={["Low", "Medium", "High", "Urgent"]} />
+            <div className="md:col-span-2">
+              <TextField
+                label="Message"
+                value="Please help us update replay and weather messaging shown in the booking engine checkout flow."
+                onChange={() => {}}
+                multiline
+              />
+            </div>
+          </div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <button className="rounded-2xl px-4 py-2 text-sm font-medium" style={{ backgroundColor: theme.accent, color: theme.white }}>
+              Send Request
+            </button>
+            <button className="rounded-2xl px-4 py-2 text-sm font-medium" style={{ border: `1px solid ${theme.border}`, color: theme.ink }}>
+              Save Draft
+            </button>
+          </div>
+        </SectionCard>
+
+        <div className="space-y-6">
+          <SectionCard
+            title="Support Reply"
+            subtitle="A support-ticket reply layout inspired by TailAdmin's threaded reply page."
+            right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.muted }}>Ticket #GB-20481</span>}
+          >
+            <div className="space-y-4">
+              {thread.map((entry) => (
+                <div key={`${entry.author}-${entry.time}`} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.surface }}>
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="font-semibold">{entry.author}</div>
+                      <div className="mt-1 text-sm" style={{ color: theme.muted }}>{entry.role}</div>
+                    </div>
+                    <div className="text-xs" style={{ color: theme.subtle }}>{entry.time}</div>
+                  </div>
+                  <div className="mt-3 text-sm" style={{ color: theme.muted }}>{entry.body}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5">
+              <TextField
+                label="Reply"
+                value="We'll update the confirmation templates and add a twilight-specific notice for shortened rounds."
+                onChange={() => {}}
+                multiline
+              />
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button className="rounded-2xl px-4 py-2 text-sm font-medium" style={{ backgroundColor: theme.accent, color: theme.white }}>
+                  Send Reply
+                </button>
+                <button className="rounded-2xl px-4 py-2 text-sm font-medium" style={{ border: `1px solid ${theme.border}`, color: theme.ink }}>
+                  Attach Reply
+                </button>
+              </div>
+            </div>
+          </SectionCard>
+
+          <SectionCard title="Ticket Details" subtitle="Quick context for the assigned support issue.">
+            <div className="grid gap-3 sm:grid-cols-2">
+              {details.map(([label, value]) => (
+                <div key={label} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+                  <div className="text-sm" style={{ color: theme.subtle }}>{label}</div>
+                  <div className="mt-2 font-semibold">{value}</div>
+                </div>
+              ))}
+            </div>
+          </SectionCard>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HelpWorkspace() {
+  const collections = [
+    { title: "Getting Started", detail: "Launch checklist, onboarding, and first-booking setup.", count: "12 Articles" },
+    { title: "Revenue Engine", detail: "Pricing, promo codes, lottery, and tee sheet operations.", count: "18 Articles" },
+    { title: "Marketing + AI", detail: "Campaigns, chat answers, FAQ builder, and automations.", count: "14 Articles" },
+    { title: "Business Scanner", detail: "Listings, reviews, sync settings, and local visibility tips.", count: "9 Articles" },
+  ];
+  const featuredArticles = [
+    "How to connect Tee Sheet Connect and validate live inventory",
+    "Best practices for Smart Pricing AI guardrails and overrides",
+    "Setting up FAQ Builder content for both Help and AI Chat",
+    "Responding to reviews and fixing listing inconsistencies quickly",
+  ];
+
+  return (
+    <div className="space-y-6 p-4 sm:p-6">
+      <SectionCard
+        title="Help Center"
+        subtitle="Mock knowledge base setup for operators, marketers, and support teams."
+        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.ink }}>Knowledge Base</span>}
+      >
+        <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="rounded-3xl border p-5" style={{ borderColor: theme.border, backgroundColor: theme.surface }}>
+            <div className="text-sm font-medium" style={{ color: theme.subtle }}>Search the Knowledge Base</div>
+            <div className="mt-4 rounded-2xl border px-4 py-3" style={{ borderColor: theme.border, backgroundColor: theme.white, color: theme.muted }}>
+              Search articles, guides, FAQs, and operator playbooks...
+            </div>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {collections.map((item) => (
+                <div key={item.title} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+                  <div className="font-semibold">{item.title}</div>
+                  <div className="mt-2 text-sm" style={{ color: theme.muted }}>{item.detail}</div>
+                  <div className="mt-3 text-xs font-semibold" style={{ color: theme.subtle }}>{item.count}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="rounded-3xl border p-5" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+              <div className="text-sm font-medium" style={{ color: theme.subtle }}>Quick Actions</div>
+              <div className="mt-4 space-y-2">
+                {["Open Support Ticket", "View Release Notes", "See Training Videos", "Download Setup Checklist"].map((item) => (
+                  <div key={item} className="rounded-2xl px-4 py-3 text-sm" style={{ backgroundColor: theme.soft, color: theme.ink }}>
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-3xl border p-5" style={{ borderColor: theme.border, backgroundColor: theme.surface }}>
+              <div className="text-sm font-medium" style={{ color: theme.subtle }}>Featured Articles</div>
+              <div className="mt-4 space-y-3">
+                {featuredArticles.map((article) => (
+                  <div key={article} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+                    <div className="font-semibold">{article}</div>
+                    <div className="mt-2 text-sm" style={{ color: theme.muted }}>Mock summary content for a searchable help article.</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+
 function GolfWebsiteAdminDashboard() {
   const [pages, setPages] = useState(initialPages);
   const [activePage, setActivePage] = useState("Membership");
@@ -1460,6 +1631,7 @@ function GolfWebsiteAdminDashboard() {
   const bottomMenuDescriptions = {
     Account: "Manage account setup, course identity, user permissions, and booking policies.",
     Settings: "Configure platform-wide booking, payment, integrations, and plan settings.",
+    Support: "Create and manage support requests with threaded replies and ticket details.",
   };
   const isBookingEngineView =
     activeTopLevel === "Revenue Engine" && (activeNestedItem === "Booking Engine" || activeNestedItem === "Smart Pricing AI");
@@ -1555,7 +1727,7 @@ function GolfWebsiteAdminDashboard() {
   };
 
   const handleBottomMenuClick = (item) => {
-    if (item === "Account" || item === "Settings") {
+    if (item === "Account" || item === "Settings" || item === "Support") {
       setActiveBottomMenu(item);
     }
   };
@@ -1704,6 +1876,10 @@ function GolfWebsiteAdminDashboard() {
             <AccountWorkspace activeTab={activeAccountTab} onTabChange={setActiveAccountTab} />
           ) : activeBottomMenu === "Settings" ? (
             <SettingsWorkspace activeTab={activeSettingsTab} onTabChange={setActiveSettingsTab} />
+          ) : activeBottomMenu === "Support" ? (
+            <SupportWorkspace />
+          ) : activeTopLevel === "Help" ? (
+            <HelpWorkspace />
           ) : activeTopLevel === "Dashboard" ? (
             <DashboardWorkspace />
           ) : isBookingEngineView ? (
