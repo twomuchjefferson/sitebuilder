@@ -126,9 +126,11 @@ const flyoutNavItems = {
   "Business Scanner": ["Business Listings", "Reviews", "Settings"],
 };
 
-const bottomMenuItems = ["Account", "Live Booking", "Support", "Sign Out"];
+const bottomMenuItems = ["Account", "Settings", "Live Booking", "Support", "Sign Out"];
 
 const bookingEngineTabs = ["Setup", "Rate Management", "Smart Pricing AI", "Tee Time Manager", "Booking Manager"];
+const accountTabs = ["Users", "Course Info", "Booking Messages", "Tee Time Policy"];
+const settingsTabs = ["Bookings", "Payments", "Smart AI Pricing", "No Show", "Data Feed", "Email", "Members", "Lottery", "3rd Party", "Other", "Plan"];
 
 const theme = {
   background: "#F5F5F5",
@@ -1223,12 +1225,209 @@ function DashboardWorkspace() {
   );
 }
 
+function AccountWorkspace({ activeTab, onTabChange }) {
+  const tabContent = {
+    Users: {
+      subtitle: "Manage admin users, permissions, and notification preferences for the golf business.",
+      cards: [
+        { title: "Jefferson Admin", detail: "Platform Owner | Full access | Last active 8 mins ago", status: "Owner" },
+        { title: "Brent Ops", detail: "Operations | Revenue + Website Admin access", status: "Active" },
+        { title: "Course GM", detail: "Manager | Reporting, reviews, and policy editing", status: "Invited" },
+      ],
+    },
+    "Course Info": {
+      subtitle: "Control the core business identity used across booking, listings, and AI systems.",
+      fields: ["Course Name", "Address", "Phone", "Primary Email", "Website URL", "Hours"],
+    },
+    "Booking Messages": {
+      subtitle: "Set the default messages surfaced through the booking engine and confirmation flows.",
+      cards: [
+        { title: "Checkout Banner", detail: "Cart pricing subject to weather, pace, and occupancy rules.", status: "Live" },
+        { title: "Confirmation Message", detail: "Arrive 20 minutes early and check in at the pro shop.", status: "Live" },
+        { title: "Twilight Notice", detail: "Replay availability depends on daily sunset and demand.", status: "Draft" },
+      ],
+    },
+    "Tee Time Policy": {
+      subtitle: "Edit tee time policy content and connect operators to deeper policy pages.",
+      cards: [
+        { title: "Cancellation Policy", detail: "24-hour notice required for full refund eligibility.", status: "Published" },
+        { title: "Rain Check Policy", detail: "Linked to website FAQ and AI Chat official answers.", status: "Synced" },
+        { title: "No Show Policy", detail: "References fee handling and replay restrictions.", status: "Needs Review" },
+      ],
+    },
+  };
+
+  const current = tabContent[activeTab];
+
+  return (
+    <div className="space-y-6 p-4 sm:p-6">
+      <SectionCard
+        title="Account"
+        subtitle="Account setup, course identity, user access, and core booking communication settings."
+        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.ink }}>Account Setup</span>}
+      >
+        <div className="overflow-x-auto">
+          <div className="flex min-w-max gap-6 border-b" style={{ borderColor: theme.border }}>
+            {accountTabs.map((tab) => {
+              const isActive = activeTab === tab;
+
+              return (
+                <button
+                  key={tab}
+                  onClick={() => onTabChange(tab)}
+                  className="relative pb-4 pt-1 text-sm font-medium transition"
+                  style={{ color: isActive ? theme.ink : theme.muted }}
+                >
+                  {tab}
+                  <span className="absolute bottom-0 left-0 h-0.5 w-full rounded-full" style={{ backgroundColor: isActive ? theme.ink : "transparent" }} />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </SectionCard>
+
+      <SectionCard title={activeTab} subtitle={current.subtitle}>
+        {current.fields ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            {current.fields.map((field) => (
+              <div key={field} className="rounded-2xl border px-4 py-3" style={{ borderColor: theme.border, backgroundColor: theme.surface }}>
+                <div className="text-sm font-medium" style={{ color: theme.subtle }}>{field}</div>
+                <div className="mt-2" style={{ color: theme.ink }}>Sample value for {field}</div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {current.cards.map((card) => (
+              <div key={card.title} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.surface }}>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <div className="font-semibold">{card.title}</div>
+                    <div className="mt-1 text-sm" style={{ color: theme.muted }}>{card.detail}</div>
+                  </div>
+                  <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.ink }}>
+                    {card.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </SectionCard>
+    </div>
+  );
+}
+
+function SettingsWorkspace({ activeTab, onTabChange }) {
+  const tabContent = {
+    Bookings: {
+      subtitle: "Rate settings, Tee Sheet Connect, and core booking behavior.",
+      items: ["Rate Settings", "Tee Sheet Connect", "Booking Settings"],
+    },
+    Payments: {
+      subtitle: "Configure merchant connections, payment gateways, and settlement handling.",
+      items: ["Connect to Merchants", "Gateway Routing", "Refund Controls"],
+    },
+    "Smart AI Pricing": {
+      subtitle: "Global controls for pricing rules, confidence thresholds, and override behavior.",
+      items: ["General Settings", "Margin Guardrails", "Operator Overrides"],
+    },
+    "No Show": {
+      subtitle: "Set no-show automation, fees, and guest communication preferences.",
+      items: ["Penalty Settings", "Grace Periods", "Auto-Flags"],
+    },
+    "Data Feed": {
+      subtitle: "Manage POS and transaction data connections that inform revenue and AI systems.",
+      items: ["POS Data Feed", "Data Mapping", "Sync Windows"],
+    },
+    Email: {
+      subtitle: "Control send settings, limits, and system-wide delivery rules.",
+      items: ["Email Settings", "Email Send Limits", "Domain Health"],
+    },
+    Members: {
+      subtitle: "Membership defaults, eligibility rules, and communication preferences.",
+      items: ["Membership Settings", "Guest Rules", "Benefits Sync"],
+    },
+    Lottery: {
+      subtitle: "Configure draw windows, allocation logic, and post-draw handling.",
+      items: ["Lottery Setup", "Priority Rules", "Release Timing"],
+    },
+    "3rd Party": {
+      subtitle: "Connect external tools and marketing platforms used across the business.",
+      items: ["Reserve with Google", "Facebook Pixel", "Google GA4"],
+    },
+    Other: {
+      subtitle: "Miscellaneous platform settings for mobile, seasonality, and business behavior.",
+      items: ["Enable Mobile PWA App", "Seasonality Settings", "Operational Defaults"],
+    },
+    Plan: {
+      subtitle: "Set which modules and capabilities are enabled under the account plan.",
+      items: ["Account Plan Settings", "Feature Flags", "Usage Limits"],
+    },
+  };
+
+  const current = tabContent[activeTab];
+
+  return (
+    <div className="space-y-6 p-4 sm:p-6">
+      <SectionCard
+        title="Settings"
+        subtitle="Platform-wide controls using a vertical tab layout inspired by the TailAdmin tabs demo."
+        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.ink }}>Vertical Tabs</span>}
+      >
+        <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
+          <div className="space-y-2">
+            {settingsTabs.map((tab) => {
+              const isActive = activeTab === tab;
+
+              return (
+                <button
+                  key={tab}
+                  onClick={() => onTabChange(tab)}
+                  className="w-full rounded-2xl px-4 py-3 text-left text-sm font-medium transition"
+                  style={
+                    isActive
+                      ? { backgroundColor: theme.accent, color: theme.white }
+                      : { backgroundColor: theme.soft, color: theme.ink }
+                  }
+                >
+                  {tab}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="space-y-4">
+            <div className="rounded-3xl border p-5" style={{ borderColor: theme.border, backgroundColor: theme.surface }}>
+              <div className="text-lg font-semibold">{activeTab}</div>
+              <div className="mt-2 text-sm" style={{ color: theme.muted }}>{current.subtitle}</div>
+            </div>
+
+            <div className="grid gap-3">
+              {current.items.map((item) => (
+                <div key={item} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+                  <div className="font-semibold">{item}</div>
+                  <div className="mt-1 text-sm" style={{ color: theme.muted }}>Mock settings surface for {item.toLowerCase()}.</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+
 function GolfWebsiteAdminDashboard() {
   const [pages, setPages] = useState(initialPages);
   const [activePage, setActivePage] = useState("Membership");
   const [activeTopLevel, setActiveTopLevel] = useState("Dashboard");
   const [expandedTopLevel, setExpandedTopLevel] = useState(null);
   const [activeBookingEngineTab, setActiveBookingEngineTab] = useState("Setup");
+  const [activeBottomMenu, setActiveBottomMenu] = useState(null);
+  const [activeAccountTab, setActiveAccountTab] = useState("Users");
+  const [activeSettingsTab, setActiveSettingsTab] = useState("Bookings");
   const [activeFlyoutSelections, setActiveFlyoutSelections] = useState({
     "Revenue Engine": "Booking Engine",
     Marketing: "Automation",
@@ -1258,13 +1457,19 @@ function GolfWebsiteAdminDashboard() {
   const hasActiveFlyout = activeFlyoutItems.length > 0;
   const activeNestedItem = hasActiveFlyout ? activeFlyoutSelections[activeTopLevel] : null;
   const activeNestedModuleConfig = nestedModuleConfigs[activeTopLevel]?.[activeNestedItem];
+  const bottomMenuDescriptions = {
+    Account: "Manage account setup, course identity, user permissions, and booking policies.",
+    Settings: "Configure platform-wide booking, payment, integrations, and plan settings.",
+  };
   const isBookingEngineView =
     activeTopLevel === "Revenue Engine" && (activeNestedItem === "Booking Engine" || activeNestedItem === "Smart Pricing AI");
   const isRevenueEngineModuleView =
     activeTopLevel === "Revenue Engine" &&
     ["Promo Codes", "Gift Cards", "Wait List", "Lottery", "Checkout Upsells"].includes(activeNestedItem);
-  const activeModuleTitle = activeNestedItem || activeTopLevel;
-  const activeModuleDescription = hasActiveFlyout
+  const activeModuleTitle = activeBottomMenu || activeNestedItem || activeTopLevel;
+  const activeModuleDescription = activeBottomMenu
+    ? bottomMenuDescriptions[activeBottomMenu]
+    : hasActiveFlyout
     ? `${topLevelDescriptions[activeTopLevel]} Secondary navigation is available in the expanded accordion menu.`
     : `${topLevelDescriptions[activeTopLevel]} The main canvas remains focused on Website Admin tools in this prototype.`;
 
@@ -1312,6 +1517,7 @@ function GolfWebsiteAdminDashboard() {
     const hasChildren = Boolean(flyoutNavItems[item]);
 
     setActiveTopLevel(item);
+    setActiveBottomMenu(null);
 
     if (hasChildren) {
       setExpandedTopLevel((prev) => (prev === item ? null : item));
@@ -1334,6 +1540,7 @@ function GolfWebsiteAdminDashboard() {
       [activeTopLevel]: item,
     }));
     setExpandedTopLevel(activeTopLevel);
+    setActiveBottomMenu(null);
   };
 
   const handleBookingEngineTabChange = (tab) => {
@@ -1344,6 +1551,12 @@ function GolfWebsiteAdminDashboard() {
         ...prev,
         "Revenue Engine": tab === "Smart Pricing AI" ? "Smart Pricing AI" : "Booking Engine",
       }));
+    }
+  };
+
+  const handleBottomMenuClick = (item) => {
+    if (item === "Account" || item === "Settings") {
+      setActiveBottomMenu(item);
     }
   };
 
@@ -1440,8 +1653,15 @@ function GolfWebsiteAdminDashboard() {
               {bottomMenuItems.map((item) => (
                 <button
                   key={item}
-                  className="mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition"
-                  style={item === "Sign Out" ? { color: theme.ink } : { color: theme.muted }}
+                  onClick={() => handleBottomMenuClick(item)}
+                  className="mb-1 w-full rounded-2xl px-4 py-3 text-left text-sm transition"
+                  style={
+                    activeBottomMenu === item
+                      ? { backgroundColor: theme.softAccent, color: theme.ink, fontWeight: 600 }
+                      : item === "Sign Out"
+                      ? { color: theme.ink }
+                      : { color: theme.muted }
+                  }
                 >
                   {item}
                 </button>
@@ -1457,7 +1677,7 @@ function GolfWebsiteAdminDashboard() {
           >
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.22em]" style={{ color: theme.subtle }}>
-                {activeTopLevel}
+                {activeBottomMenu || activeTopLevel}
               </div>
               <h1 className="text-2xl font-bold tracking-tight">{activeModuleTitle}</h1>
               <p className="mt-1 max-w-3xl text-sm" style={{ color: theme.muted }}>
@@ -1480,7 +1700,11 @@ function GolfWebsiteAdminDashboard() {
             </div>
           </div>
 
-          {activeTopLevel === "Dashboard" ? (
+          {activeBottomMenu === "Account" ? (
+            <AccountWorkspace activeTab={activeAccountTab} onTabChange={setActiveAccountTab} />
+          ) : activeBottomMenu === "Settings" ? (
+            <SettingsWorkspace activeTab={activeSettingsTab} onTabChange={setActiveSettingsTab} />
+          ) : activeTopLevel === "Dashboard" ? (
             <DashboardWorkspace />
           ) : isBookingEngineView ? (
             <BookingEngineWorkspace activeTab={activeBookingEngineTab} onTabChange={handleBookingEngineTabChange} />
