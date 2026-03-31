@@ -267,7 +267,7 @@ function SelectField({ label, value, onChange, options }) {
 }
 
 function MenuIcon({ item, active = false }) {
-  const stroke = active ? theme.accent : theme.darkMuted;
+  const stroke = active ? theme.white : theme.subtle;
   const props = {
     viewBox: "0 0 24 24",
     fill: "none",
@@ -357,6 +357,20 @@ function ChevronIcon({ open }) {
     >
       <path d="M6 9l6 6 6-6" />
     </svg>
+  );
+}
+
+function BrandLogo() {
+  return (
+    <div
+      className="flex h-11 w-11 items-center justify-center rounded-2xl"
+      style={{ backgroundColor: theme.softAccent, color: theme.accent }}
+    >
+      <svg viewBox="0 0 20 20" fill="none" className="h-7 w-7">
+        <circle cx="10" cy="10" r="8.5" stroke="currentColor" strokeWidth="2" />
+        <path d="M12 7L9 10L12 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
   );
 }
 
@@ -492,7 +506,7 @@ function PageFieldEditor({ activePage, pageData, onFieldChange }) {
 function GolfWebsiteAdminDashboard() {
   const [pages, setPages] = useState(initialPages);
   const [activePage, setActivePage] = useState("Membership");
-  const [activeTopLevel, setActiveTopLevel] = useState("Website Admin");
+  const [activeTopLevel, setActiveTopLevel] = useState("Dashboard");
   const [activeFlyoutSelections, setActiveFlyoutSelections] = useState({
     "Revenue Engine": "Booking Engine",
     Marketing: "Automation",
@@ -581,29 +595,24 @@ function GolfWebsiteAdminDashboard() {
     <div className="min-h-screen" style={{ backgroundColor: theme.background, color: theme.ink }}>
       <div className="flex min-h-screen flex-col xl:flex-row">
         <aside
-          className="relative w-full border-b text-white xl:w-72 xl:border-b-0 xl:border-r"
-          style={{ backgroundColor: theme.ink, borderColor: theme.darkBorder }}
+          className="relative w-full border-b xl:w-72 xl:border-b-0 xl:border-r"
+          style={{ backgroundColor: theme.white, borderColor: theme.border, color: theme.ink }}
         >
           <div className="flex h-full flex-col xl:min-h-screen">
             <div className="p-5">
               <div className="flex items-center gap-3">
-                <div
-                  className="flex h-11 w-11 items-center justify-center rounded-2xl text-sm font-bold"
-                  style={{ backgroundColor: theme.accent, color: theme.white }}
-                >
-                  GB
-                </div>
+                <BrandLogo />
                 <div>
-                  <div className="text-sm" style={{ color: theme.darkSubtle }}>
-                    Website Builder
+                  <div className="text-sm" style={{ color: theme.subtle }}>
+                    Golf Business AI
                   </div>
-                  <div className="text-lg font-semibold">GolfBack Admin</div>
+                  <div className="text-lg font-semibold">GolfBack AI</div>
                 </div>
               </div>
             </div>
 
             <nav className="px-3">
-              <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em]" style={{ color: theme.darkSubtle }}>
+              <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em]" style={{ color: theme.subtle }}>
                 Platform
               </div>
               {topLevelNavItems.map((item) => {
@@ -618,13 +627,13 @@ function GolfWebsiteAdminDashboard() {
                       style={
                         isActive
                           ? { backgroundColor: "rgba(43,43,43,.65)", color: theme.white, boxShadow: "0 10px 30px rgba(2, 6, 24, 0.25)" }
-                          : { color: theme.darkMuted }
+                          : { color: theme.muted }
                       }
                     >
                       <span className="flex items-center gap-3">
                         <span
                           className="flex h-9 w-9 items-center justify-center rounded-2xl"
-                          style={isActive ? { backgroundColor: "rgba(255,255,255,0.08)" } : { backgroundColor: theme.darkHover }}
+                          style={isActive ? { backgroundColor: "rgba(255,255,255,0.08)" } : { backgroundColor: theme.soft }}
                         >
                           <MenuIcon item={item} active={isActive} />
                         </span>
@@ -647,8 +656,8 @@ function GolfWebsiteAdminDashboard() {
                               className="w-full rounded-2xl px-4 py-3 text-left text-sm transition"
                               style={
                                 activeNestedItem === nestedItem
-                                  ? { backgroundColor: "rgba(67, 45, 215, .2)", color: theme.white, fontWeight: 600 }
-                                  : { color: theme.darkMuted }
+                                  ? { backgroundColor: "rgba(67, 45, 215, .2)", color: theme.accent, fontWeight: 600 }
+                                  : { color: theme.muted }
                               }
                             >
                               {nestedItem}
@@ -666,16 +675,16 @@ function GolfWebsiteAdminDashboard() {
 
             <div
               className="border-t px-3 py-4 xl:sticky xl:bottom-0 xl:mt-auto"
-              style={{ borderColor: theme.darkBorder, backgroundColor: theme.ink }}
+              style={{ borderColor: theme.border, backgroundColor: theme.white }}
             >
-              <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em]" style={{ color: theme.darkSubtle }}>
+              <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em]" style={{ color: theme.subtle }}>
                 Account
               </div>
               {bottomMenuItems.map((item) => (
                 <button
                   key={item}
                   className="mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition"
-                  style={item === "Sign Out" ? { color: theme.accent } : { color: theme.darkMuted }}
+                  style={item === "Sign Out" ? { color: theme.accent } : { color: theme.muted }}
                 >
                   {item}
                 </button>
