@@ -129,20 +129,16 @@ const flyoutNavItems = {
 const bottomMenuItems = ["Account", "Live Booking", "Support", "Sign Out"];
 
 const theme = {
-  background: "#f1f5f9",
-  ink: "#020618",
-  accent: "#432dd7",
+  background: "#f7f7f7",
+  ink: "#000000",
+  accent: "#262626",
   white: "#ffffff",
-  border: "rgba(2, 6, 24, 0.12)",
-  muted: "rgba(2, 6, 24, 0.64)",
-  subtle: "rgba(2, 6, 24, 0.45)",
-  soft: "rgba(2, 6, 24, 0.08)",
-  softAccent: "rgba(67, 45, 215, 0.12)",
-  strongAccent: "rgba(67, 45, 215, 0.18)",
-  darkBorder: "rgba(241, 245, 249, 0.12)",
-  darkMuted: "rgba(241, 245, 249, 0.68)",
-  darkSubtle: "rgba(241, 245, 249, 0.45)",
-  darkHover: "rgba(241, 245, 249, 0.08)",
+  border: "#eeeeee",
+  muted: "rgba(0, 0, 0, 0.64)",
+  subtle: "rgba(38, 38, 38, 0.56)",
+  soft: "#f7f7f7",
+  softAccent: "rgba(38, 38, 38, 0.08)",
+  strongAccent: "rgba(38, 38, 38, 0.12)",
 };
 
 const topLevelDescriptions = {
@@ -188,7 +184,7 @@ function Toggle({ enabled, onClick }) {
     <button
       onClick={onClick}
       className={`flex h-7 w-12 items-center rounded-full p-1 transition ${enabled ? "justify-end" : "justify-start"}`}
-      style={{ backgroundColor: enabled ? theme.accent : "rgba(2, 6, 24, 0.18)" }}
+      style={{ backgroundColor: enabled ? theme.accent : theme.border }}
     >
       <div className="h-5 w-5 rounded-full" style={{ backgroundColor: theme.white }} />
     </button>
@@ -201,7 +197,7 @@ function SectionCard({ title, subtitle, right, children }) {
       className="rounded-3xl p-5 shadow-sm"
       style={{
         backgroundColor: theme.white,
-        boxShadow: "0 12px 32px rgba(2, 6, 24, 0.06)",
+        boxShadow: "0 12px 32px rgba(0, 0, 0, 0.04)",
         border: `1px solid ${theme.border}`,
       }}
     >
@@ -626,7 +622,7 @@ function GolfWebsiteAdminDashboard() {
                       className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm transition"
                       style={
                         isActive
-                          ? { backgroundColor: "rgba(43,43,43,.65)", color: theme.white, boxShadow: "0 10px 30px rgba(2, 6, 24, 0.25)" }
+                          ? { backgroundColor: theme.accent, color: theme.white }
                           : { color: theme.muted }
                       }
                     >
@@ -656,7 +652,7 @@ function GolfWebsiteAdminDashboard() {
                               className="w-full rounded-2xl px-4 py-3 text-left text-sm transition"
                               style={
                                 activeNestedItem === nestedItem
-                                  ? { backgroundColor: "rgba(67, 45, 215, .2)", color: theme.accent, fontWeight: 600 }
+                                  ? { backgroundColor: theme.softAccent, color: theme.accent, fontWeight: 600 }
                                   : { color: theme.muted }
                               }
                             >
