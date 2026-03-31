@@ -131,16 +131,17 @@ const bottomMenuItems = ["Account", "Live Booking", "Support", "Sign Out"];
 const bookingEngineTabs = ["Setup", "Rate Management", "Smart Pricing AI", "Tee Time Manager", "Booking Manager"];
 
 const theme = {
-  background: "#f7f7f7",
-  ink: "#000000",
-  accent: "#262626",
-  white: "#ffffff",
-  border: "#eeeeee",
-  muted: "rgba(0, 0, 0, 0.64)",
-  subtle: "rgba(38, 38, 38, 0.56)",
-  soft: "#f7f7f7",
-  softAccent: "rgba(38, 38, 38, 0.08)",
-  strongAccent: "rgba(38, 38, 38, 0.12)",
+  background: "#F5F5F5",
+  ink: "#2563EB",
+  accent: "#2563EB",
+  white: "#FFFFFF",
+  surface: "#FDFDFD",
+  border: "#F5F5F5",
+  muted: "rgba(37, 99, 235, 0.72)",
+  subtle: "rgba(37, 99, 235, 0.54)",
+  soft: "#F5F5F5",
+  softAccent: "rgba(87, 135, 239, 0.16)",
+  strongAccent: "rgba(87, 135, 239, 0.28)",
 };
 
 const topLevelDescriptions = {
@@ -198,7 +199,7 @@ function SectionCard({ title, subtitle, right, children }) {
     <section
       className="rounded-3xl p-5 shadow-sm"
       style={{
-        backgroundColor: theme.white,
+        backgroundColor: theme.surface,
         boxShadow: "0 12px 32px rgba(0, 0, 0, 0.04)",
         border: `1px solid ${theme.border}`,
       }}
@@ -362,7 +363,7 @@ function BrandLogo() {
   return (
     <div
       className="flex h-11 w-11 items-center justify-center rounded-2xl"
-      style={{ backgroundColor: theme.softAccent, color: theme.accent }}
+      style={{ backgroundColor: theme.strongAccent, color: theme.accent }}
     >
       <svg viewBox="0 0 20 20" fill="none" className="h-7 w-7">
         <circle cx="10" cy="10" r="8.5" stroke="currentColor" strokeWidth="2" />
@@ -1351,7 +1352,7 @@ function GolfWebsiteAdminDashboard() {
       <div className="flex min-h-screen flex-col xl:flex-row">
         <aside
           className="relative w-full border-b xl:w-72 xl:border-b-0 xl:border-r"
-          style={{ backgroundColor: theme.white, borderColor: theme.border, color: theme.ink }}
+          style={{ backgroundColor: theme.surface, borderColor: theme.border, color: theme.ink }}
         >
           <div className="flex h-full flex-col xl:min-h-screen">
             <div className="p-5">
@@ -1431,7 +1432,7 @@ function GolfWebsiteAdminDashboard() {
 
             <div
               className="border-t px-3 py-4 xl:sticky xl:bottom-0 xl:mt-auto"
-              style={{ borderColor: theme.border, backgroundColor: theme.white }}
+              style={{ borderColor: theme.border, backgroundColor: theme.surface }}
             >
               <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em]" style={{ color: theme.subtle }}>
                 Account
@@ -1452,7 +1453,7 @@ function GolfWebsiteAdminDashboard() {
         <main className="flex-1">
           <div
             className="flex flex-col gap-4 border-b px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between"
-            style={{ backgroundColor: theme.white, borderColor: theme.border }}
+            style={{ backgroundColor: theme.surface, borderColor: theme.border }}
           >
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.22em]" style={{ color: theme.subtle }}>
