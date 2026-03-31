@@ -128,6 +128,8 @@ const flyoutNavItems = {
 
 const bottomMenuItems = ["Account", "Live Booking", "Support", "Sign Out"];
 
+const bookingEngineTabs = ["Setup", "Rate Management", "Smart Pricing AI", "Tee Time Manager", "Booking Manager"];
+
 const theme = {
   background: "#f7f7f7",
   ink: "#000000",
@@ -499,10 +501,233 @@ function PageFieldEditor({ activePage, pageData, onFieldChange }) {
   );
 }
 
+function BookingEngineWorkspace({ activeTab, onTabChange }) {
+  const ratePlans = [
+    { name: "Public Prime", window: "Fri-Sun", logic: "Rack Rate", status: "Live" },
+    { name: "Member Guest", window: "Daily", logic: "Member Linked", status: "Live" },
+    { name: "Twilight Saver", window: "After 3:00 PM", logic: "Auto Discount", status: "Draft" },
+  ];
+  const timeSlots = [
+    { season: "Peak Season", dates: "Apr 1 - Oct 31", slots: "6:30 AM - 6:40 PM", interval: "10 minutes" },
+    { season: "Shoulder Season", dates: "Mar 1 - Mar 31", slots: "7:10 AM - 5:50 PM", interval: "10 minutes" },
+    { season: "Winter Season", dates: "Nov 1 - Feb 28", slots: "8:00 AM - 4:20 PM", interval: "12 minutes" },
+  ];
+  const highDemandDays = [4, 5, 11, 12, 18, 19, 25, 26];
+  const teeSheet = [
+    { time: "7:10 AM", inventory: "4 open", rule: "Public Prime", note: "Starter block removed" },
+    { time: "8:20 AM", inventory: "2 open", rule: "Smart Pricing +12%", note: "Weekend demand applied" },
+    { time: "9:40 AM", inventory: "Waitlist only", rule: "Lottery Hold", note: "Member event release at 3 PM" },
+  ];
+  const reservations = [
+    { name: "Jordan Reed", teeTime: "8:20 AM", source: "Website", spend: "$132", status: "Confirmed" },
+    { name: "Alex Chen", teeTime: "9:10 AM", source: "Call Center", spend: "$88", status: "Pending Payment" },
+    { name: "Mia Torres", teeTime: "10:30 AM", source: "Widget", spend: "$164", status: "Modified" },
+  ];
+
+  const renderSetup = () => (
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+      <SectionCard
+        title="Rate Plans"
+        subtitle="Define the pricing frameworks available to the booking engine."
+        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.accent }}>3 Active Plans</span>}
+      >
+        <div className="space-y-3">
+          {ratePlans.map((plan) => (
+            <div key={plan.name} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.background }}>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="font-semibold">{plan.name}</div>
+                  <div className="mt-1 text-sm" style={{ color: theme.muted }}>{plan.window} | {plan.logic}</div>
+                </div>
+                <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: plan.status === "Live" ? theme.softAccent : theme.soft, color: theme.accent }}>
+                  {plan.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      <div className="space-y-6">
+        <SectionCard title="Seasons and Time Slots" subtitle="Control the operating windows that shape available inventory.">
+          <div className="space-y-3">
+            {timeSlots.map((item) => (
+              <div key={item.season} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+                <div className="font-semibold">{item.season}</div>
+                <div className="mt-2 grid gap-2 text-sm" style={{ color: theme.muted }}>
+                  <div>{item.dates}</div>
+                  <div>{item.slots}</div>
+                  <div>{item.interval} tee interval</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+
+        <SectionCard title="High Demand Day Calendar" subtitle="Flag peak demand dates for pricing and inventory rules.">
+          <div className="grid grid-cols-7 gap-2 text-center text-xs font-medium" style={{ color: theme.subtle }}>
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+              <div key={day} className="pb-2">{day}</div>
+            ))}
+            {Array.from({ length: 35 }, (_, index) => {
+              const dayNumber = index - 1;
+              const isRealDay = dayNumber > 0 && dayNumber <= 31;
+              const isHot = highDemandDays.includes(dayNumber);
+
+              return (
+                <div
+                  key={index}
+                  className="flex h-11 items-center justify-center rounded-2xl border text-sm"
+                  style={{
+                    borderColor: theme.border,
+                    backgroundColor: isHot ? theme.softAccent : theme.white,
+                    color: isHot ? theme.accent : isRealDay ? theme.ink : theme.subtle,
+                  }}
+                >
+                  {isRealDay ? dayNumber : ""}
+                </div>
+              );
+            })}
+          </div>
+        </SectionCard>
+      </div>
+    </div>
+  );
+
+  const renderRateManagement = () => (
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+      {[
+        { label: "Average Rack Rate", value: "$84", note: "Across next 14 days" },
+        { label: "Weekend Premium", value: "+18%", note: "Against weekday baseline" },
+        { label: "Pending Overrides", value: "7", note: "Awaiting manager approval" },
+      ].map((item) => (
+        <SectionCard key={item.label} title={item.label} subtitle={item.note}>
+          <div className="text-3xl font-bold">{item.value}</div>
+        </SectionCard>
+      ))}
+    </div>
+  );
+
+  const renderSmartPricing = () => (
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+      <SectionCard title="Smart Pricing AI" subtitle="Suggested pricing adjustments based on pace, weather, and booking velocity.">
+        <div className="space-y-3">
+          {[
+            "Raise Saturday 8:00 AM-11:00 AM inventory by 9% based on sell-through.",
+            "Release unused lottery holds after 2:00 PM on member event days.",
+            "Reduce after-4 PM pricing by 6% on Tuesdays to improve twilight utilization.",
+          ].map((item) => (
+            <div key={item} className="rounded-2xl px-4 py-3 text-sm" style={{ backgroundColor: theme.background, color: theme.muted }}>
+              {item}
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+      <SectionCard title="Model Inputs" subtitle="Mock signals feeding the pricing engine.">
+        <div className="grid gap-3 sm:grid-cols-2">
+          {[
+            ["7-Day Pace", "82%"],
+            ["Weather Confidence", "High"],
+            ["Local Demand", "Strong"],
+            ["Comp Set Delta", "+$6"],
+          ].map(([label, value]) => (
+            <div key={label} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+              <div className="text-sm" style={{ color: theme.subtle }}>{label}</div>
+              <div className="mt-2 text-2xl font-semibold">{value}</div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+    </div>
+  );
+
+  const renderTeeTimeManager = () => (
+    <SectionCard title="Tee Time Manager" subtitle="Monitor inventory releases, holds, and pacing throughout the day.">
+      <div className="space-y-3">
+        {teeSheet.map((slot) => (
+          <div key={slot.time} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div className="font-semibold">{slot.time}</div>
+                <div className="mt-1 text-sm" style={{ color: theme.muted }}>{slot.rule} | {slot.note}</div>
+              </div>
+              <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.accent }}>
+                {slot.inventory}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </SectionCard>
+  );
+
+  const renderBookingManager = () => (
+    <SectionCard title="Booking Manager" subtitle="Review reservation flow, modifications, and checkout status.">
+      <div className="space-y-3">
+        {reservations.map((reservation) => (
+          <div key={reservation.name} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div className="font-semibold">{reservation.name}</div>
+                <div className="mt-1 text-sm" style={{ color: theme.muted }}>
+                  {reservation.teeTime} | {reservation.source} | {reservation.spend}
+                </div>
+              </div>
+              <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.accent }}>
+                {reservation.status}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </SectionCard>
+  );
+
+  return (
+    <div className="space-y-6 p-4 sm:p-6">
+      <SectionCard
+        title="Booking Engine"
+        subtitle="Mock control center for tee sheet configuration, pricing rules, and reservation operations."
+        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.muted }}>TailAdmin-Style Tabs</span>}
+      >
+        <div className="overflow-x-auto">
+          <div className="flex min-w-max gap-6 border-b" style={{ borderColor: theme.border }}>
+            {bookingEngineTabs.map((tab) => {
+              const isActive = activeTab === tab;
+
+              return (
+                <button
+                  key={tab}
+                  onClick={() => onTabChange(tab)}
+                  className="relative pb-4 pt-1 text-sm font-medium transition"
+                  style={{ color: isActive ? theme.ink : theme.muted }}
+                >
+                  {tab}
+                  <span
+                    className="absolute bottom-0 left-0 h-0.5 w-full rounded-full"
+                    style={{ backgroundColor: isActive ? theme.ink : "transparent" }}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </SectionCard>
+
+      {activeTab === "Setup" ? renderSetup() : null}
+      {activeTab === "Rate Management" ? renderRateManagement() : null}
+      {activeTab === "Smart Pricing AI" ? renderSmartPricing() : null}
+      {activeTab === "Tee Time Manager" ? renderTeeTimeManager() : null}
+      {activeTab === "Booking Manager" ? renderBookingManager() : null}
+    </div>
+  );
+}
+
 function GolfWebsiteAdminDashboard() {
   const [pages, setPages] = useState(initialPages);
   const [activePage, setActivePage] = useState("Membership");
   const [activeTopLevel, setActiveTopLevel] = useState("Dashboard");
+  const [activeBookingEngineTab, setActiveBookingEngineTab] = useState("Setup");
   const [activeFlyoutSelections, setActiveFlyoutSelections] = useState({
     "Revenue Engine": "Booking Engine",
     Marketing: "Automation",
@@ -531,6 +756,7 @@ function GolfWebsiteAdminDashboard() {
   const activeFlyoutItems = flyoutNavItems[activeTopLevel] || [];
   const hasActiveFlyout = activeFlyoutItems.length > 0;
   const activeNestedItem = hasActiveFlyout ? activeFlyoutSelections[activeTopLevel] : null;
+  const isBookingEngineView = activeTopLevel === "Revenue Engine" && activeNestedItem === "Booking Engine";
   const activeModuleTitle = activeNestedItem || activeTopLevel;
   const activeModuleDescription = hasActiveFlyout
     ? `${topLevelDescriptions[activeTopLevel]} Secondary navigation is available in the expanded accordion menu.`
@@ -719,218 +945,222 @@ function GolfWebsiteAdminDashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 p-4 sm:p-6 2xl:grid-cols-[1.15fr_0.85fr]">
-            <div className="space-y-6">
-              <SectionCard
-                title="Brand Settings"
-                subtitle="Control the global visual system used by the standardized templates."
-                right={
-                  <span
-                    className="rounded-full px-3 py-1 text-xs font-semibold"
-                    style={{ backgroundColor: theme.softAccent, color: theme.accent }}
-                  >
-                    Theme Ready
-                  </span>
-                }
-              >
-                <div className="grid gap-4 md:grid-cols-2">
-                  <TextField label="Course name" value={brand.courseName} onChange={(e) => setBrand((b) => ({ ...b, courseName: e.target.value }))} />
-                  <SelectField
-                    label="Primary font"
-                    value={brand.fontFamily}
-                    onChange={(e) => setBrand((b) => ({ ...b, fontFamily: e.target.value }))}
-                    options={["'Inter', sans-serif", "'Montserrat', sans-serif", "'DM Sans', sans-serif"]}
-                  />
-                  <TextField label="Accent color" value={brand.accentColor} onChange={(e) => setBrand((b) => ({ ...b, accentColor: e.target.value }))} />
-                  <TextField label="Button text color" value={brand.buttonTextColor} onChange={(e) => setBrand((b) => ({ ...b, buttonTextColor: e.target.value }))} />
-                  <TextField label="Logo file" value={brand.logoName} onChange={(e) => setBrand((b) => ({ ...b, logoName: e.target.value }))} />
-                  <TextField label="Hero background source" value={brand.heroBackground} onChange={(e) => setBrand((b) => ({ ...b, heroBackground: e.target.value }))} />
-                </div>
-              </SectionCard>
-
-              <SectionCard
-                title="Website Pages"
-                subtitle="Enable pages, jump into their settings, and control page-level status."
-                right={
-                  <span
-                    className="rounded-full px-3 py-1 text-xs font-semibold"
-                    style={{ backgroundColor: theme.soft, color: theme.muted }}
-                  >
-                    Clickable Navigation
-                  </span>
-                }
-              >
-                <div className="grid gap-3 lg:grid-cols-2">
-                  {Object.entries(pages).map(([pageName, data]) => (
-                    <div
-                      key={pageName}
-                      className="rounded-3xl border p-4 transition"
-                      style={
-                        activePage === pageName
-                          ? { borderColor: theme.accent, backgroundColor: theme.softAccent }
-                          : { borderColor: theme.border, backgroundColor: theme.white }
-                      }
+          {isBookingEngineView ? (
+            <BookingEngineWorkspace activeTab={activeBookingEngineTab} onTabChange={setActiveBookingEngineTab} />
+          ) : (
+            <div className="grid grid-cols-1 gap-6 p-4 sm:p-6 2xl:grid-cols-[1.15fr_0.85fr]">
+              <div className="space-y-6">
+                <SectionCard
+                  title="Brand Settings"
+                  subtitle="Control the global visual system used by the standardized templates."
+                  right={
+                    <span
+                      className="rounded-full px-3 py-1 text-xs font-semibold"
+                      style={{ backgroundColor: theme.softAccent, color: theme.accent }}
                     >
-                      <div className="flex items-start justify-between gap-3">
-                        <button className="text-left" onClick={() => setActivePage(pageName)}>
-                          <div className="text-lg font-semibold">
-                            <span className="mr-2 text-xs" style={{ color: theme.subtle }}>
-                              {data.icon}
-                            </span>
-                            {pageName}
-                          </div>
-                          <div className="mt-1 text-sm" style={{ color: theme.muted }}>
-                            {pageDescriptions[pageName]}
-                          </div>
-                        </button>
-                        <Toggle enabled={data.enabled} onClick={() => togglePage(pageName)} />
-                      </div>
-                      <div className="mt-4 flex flex-wrap items-center gap-2">
-                        <StatusPill status={data.status} />
-                        <button
-                          onClick={() => setActivePage(pageName)}
-                          className="rounded-full px-3 py-1 text-xs font-medium"
-                          style={{ border: `1px solid ${theme.border}` }}
-                        >
-                          Edit Page
-                        </button>
-                        {data.enabled ? (
+                      Theme Ready
+                    </span>
+                  }
+                >
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <TextField label="Course name" value={brand.courseName} onChange={(e) => setBrand((b) => ({ ...b, courseName: e.target.value }))} />
+                    <SelectField
+                      label="Primary font"
+                      value={brand.fontFamily}
+                      onChange={(e) => setBrand((b) => ({ ...b, fontFamily: e.target.value }))}
+                      options={["'Inter', sans-serif", "'Montserrat', sans-serif", "'DM Sans', sans-serif"]}
+                    />
+                    <TextField label="Accent color" value={brand.accentColor} onChange={(e) => setBrand((b) => ({ ...b, accentColor: e.target.value }))} />
+                    <TextField label="Button text color" value={brand.buttonTextColor} onChange={(e) => setBrand((b) => ({ ...b, buttonTextColor: e.target.value }))} />
+                    <TextField label="Logo file" value={brand.logoName} onChange={(e) => setBrand((b) => ({ ...b, logoName: e.target.value }))} />
+                    <TextField label="Hero background source" value={brand.heroBackground} onChange={(e) => setBrand((b) => ({ ...b, heroBackground: e.target.value }))} />
+                  </div>
+                </SectionCard>
+
+                <SectionCard
+                  title="Website Pages"
+                  subtitle="Enable pages, jump into their settings, and control page-level status."
+                  right={
+                    <span
+                      className="rounded-full px-3 py-1 text-xs font-semibold"
+                      style={{ backgroundColor: theme.soft, color: theme.muted }}
+                    >
+                      Clickable Navigation
+                    </span>
+                  }
+                >
+                  <div className="grid gap-3 lg:grid-cols-2">
+                    {Object.entries(pages).map(([pageName, data]) => (
+                      <div
+                        key={pageName}
+                        className="rounded-3xl border p-4 transition"
+                        style={
+                          activePage === pageName
+                            ? { borderColor: theme.accent, backgroundColor: theme.softAccent }
+                            : { borderColor: theme.border, backgroundColor: theme.white }
+                        }
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <button className="text-left" onClick={() => setActivePage(pageName)}>
+                            <div className="text-lg font-semibold">
+                              <span className="mr-2 text-xs" style={{ color: theme.subtle }}>
+                                {data.icon}
+                              </span>
+                              {pageName}
+                            </div>
+                            <div className="mt-1 text-sm" style={{ color: theme.muted }}>
+                              {pageDescriptions[pageName]}
+                            </div>
+                          </button>
+                          <Toggle enabled={data.enabled} onClick={() => togglePage(pageName)} />
+                        </div>
+                        <div className="mt-4 flex flex-wrap items-center gap-2">
+                          <StatusPill status={data.status} />
                           <button
-                            onClick={() => setPageStatus(pageName, data.status === "Published" ? "Draft" : "Published")}
+                            onClick={() => setActivePage(pageName)}
                             className="rounded-full px-3 py-1 text-xs font-medium"
                             style={{ border: `1px solid ${theme.border}` }}
                           >
-                            {data.status === "Published" ? "Move to Draft" : "Publish Page"}
+                            Edit Page
                           </button>
-                        ) : null}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </SectionCard>
-
-              <SectionCard
-                title={`${activePage} Page Settings`}
-                subtitle={pageDescriptions[activePage]}
-                right={<StatusPill status={activePageData.status} />}
-              >
-                {!activePageData.enabled ? (
-                  <div
-                    className="rounded-3xl border border-dashed p-6 text-sm"
-                    style={{ borderColor: theme.border, backgroundColor: theme.background, color: theme.muted }}
-                  >
-                    This page is currently disabled. Turn it on in Website Pages to activate its template and content inputs.
-                  </div>
-                ) : (
-                  <>
-                    <PageFieldEditor activePage={activePage} pageData={activePageData} onFieldChange={updatePageField} />
-                    <div className="mt-5 flex flex-wrap gap-3">
-                      <button
-                        className="rounded-2xl px-4 py-2 text-sm font-medium text-white"
-                        style={{ backgroundColor: theme.accent, color: theme.white }}
-                      >
-                        Generate {activePage} Page
-                      </button>
-                      <button
-                        className="rounded-2xl px-4 py-2 text-sm font-medium"
-                        style={{ border: `1px solid ${theme.border}` }}
-                      >
-                        View AI Inputs
-                      </button>
-                    </div>
-                  </>
-                )}
-              </SectionCard>
-
-              <SectionCard
-                title="Weekly SEO and AI Optimization Agent"
-                subtitle="The agent scans content quality, local consistency, schema coverage, and internal linking opportunities."
-                right={
-                  <span
-                    className="rounded-full px-3 py-1 text-xs font-semibold"
-                    style={{ backgroundColor: theme.softAccent, color: theme.accent }}
-                  >
-                    Next Scan: Sunday 2:00 AM
-                  </span>
-                }
-              >
-                <div className="grid gap-4 xl:grid-cols-[0.8fr_1.2fr]">
-                  <div className="rounded-3xl p-4" style={{ backgroundColor: theme.background }}>
-                    <div className="text-sm font-semibold" style={{ color: theme.ink }}>
-                      Focus Areas
-                    </div>
-                    <div className="mt-3 space-y-2 text-sm" style={{ color: theme.muted }}>
-                      <div>Search visibility</div>
-                      <div>AI-answer readiness</div>
-                      <div>Business Scanner consistency</div>
-                      <div>Internal links and schema opportunities</div>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    {auditItems.map((item) => (
-                      <div key={item.title} className="rounded-3xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span
-                            className="rounded-full px-3 py-1 text-xs font-semibold"
-                            style={{ backgroundColor: theme.soft, color: theme.ink }}
-                          >
-                            {item.type}
-                          </span>
-                          <span
-                            className="rounded-full px-3 py-1 text-xs font-semibold"
-                            style={{ backgroundColor: theme.softAccent, color: theme.accent }}
-                          >
-                            {item.priority}
-                          </span>
-                        </div>
-                        <div className="mt-3 text-sm" style={{ color: theme.ink }}>
-                          {item.title}
+                          {data.enabled ? (
+                            <button
+                              onClick={() => setPageStatus(pageName, data.status === "Published" ? "Draft" : "Published")}
+                              className="rounded-full px-3 py-1 text-xs font-medium"
+                              style={{ border: `1px solid ${theme.border}` }}
+                            >
+                              {data.status === "Published" ? "Move to Draft" : "Publish Page"}
+                            </button>
+                          ) : null}
                         </div>
                       </div>
                     ))}
                   </div>
-                </div>
-              </SectionCard>
-            </div>
+                </SectionCard>
 
-            <div className="space-y-6">
-              <SectionCard
-                title="Live Mobile Preview"
-                subtitle="See the active page render in a mobile-first layout using your template system and current inputs."
-                right={
-                  <div className="rounded-full px-3 py-1 text-xs font-medium" style={{ backgroundColor: theme.soft, color: theme.muted }}>
-                    iPhone Width
-                  </div>
-                }
-              >
-                <MobilePreview activePage={activePage} brand={brand} fields={activePageData.fields} />
-              </SectionCard>
-
-              <SectionCard title="Publish Workflow" subtitle="An example of how this app could guide operators from input to live website.">
-                <div className="space-y-3 text-sm" style={{ color: theme.muted }}>
-                  {[
-                    "1. Operator enables the page they want on the website.",
-                    "2. Structured inputs replace open-ended page building.",
-                    "3. AI applies approved templates, brand settings, and images.",
-                    "4. Team reviews the live mobile preview before publishing.",
-                    "5. Weekly audits suggest ranking, AI, and Business Scanner improvements.",
-                  ].map((step) => (
-                    <div key={step} className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>
-                      {step}
+                <SectionCard
+                  title={`${activePage} Page Settings`}
+                  subtitle={pageDescriptions[activePage]}
+                  right={<StatusPill status={activePageData.status} />}
+                >
+                  {!activePageData.enabled ? (
+                    <div
+                      className="rounded-3xl border border-dashed p-6 text-sm"
+                      style={{ borderColor: theme.border, backgroundColor: theme.background, color: theme.muted }}
+                    >
+                      This page is currently disabled. Turn it on in Website Pages to activate its template and content inputs.
                     </div>
-                  ))}
-                </div>
-              </SectionCard>
+                  ) : (
+                    <>
+                      <PageFieldEditor activePage={activePage} pageData={activePageData} onFieldChange={updatePageField} />
+                      <div className="mt-5 flex flex-wrap gap-3">
+                        <button
+                          className="rounded-2xl px-4 py-2 text-sm font-medium text-white"
+                          style={{ backgroundColor: theme.accent, color: theme.white }}
+                        >
+                          Generate {activePage} Page
+                        </button>
+                        <button
+                          className="rounded-2xl px-4 py-2 text-sm font-medium"
+                          style={{ border: `1px solid ${theme.border}` }}
+                        >
+                          View AI Inputs
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </SectionCard>
 
-              <SectionCard title="Prototype Notes" subtitle="This version is ready to demo visually and can be hosted on GitHub Pages.">
-                <div className="space-y-3 text-sm" style={{ color: theme.muted }}>
-                  <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>Single-file React prototype for quick sharing with your team.</div>
-                  <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>Clickable page navigation and editable page-level inputs.</div>
-                  <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>Good next step: connect this UI to JSON page schemas and an AI generation service.</div>
-                </div>
-              </SectionCard>
+                <SectionCard
+                  title="Weekly SEO and AI Optimization Agent"
+                  subtitle="The agent scans content quality, local consistency, schema coverage, and internal linking opportunities."
+                  right={
+                    <span
+                      className="rounded-full px-3 py-1 text-xs font-semibold"
+                      style={{ backgroundColor: theme.softAccent, color: theme.accent }}
+                    >
+                      Next Scan: Sunday 2:00 AM
+                    </span>
+                  }
+                >
+                  <div className="grid gap-4 xl:grid-cols-[0.8fr_1.2fr]">
+                    <div className="rounded-3xl p-4" style={{ backgroundColor: theme.background }}>
+                      <div className="text-sm font-semibold" style={{ color: theme.ink }}>
+                        Focus Areas
+                      </div>
+                      <div className="mt-3 space-y-2 text-sm" style={{ color: theme.muted }}>
+                        <div>Search visibility</div>
+                        <div>AI-answer readiness</div>
+                        <div>Business Scanner consistency</div>
+                        <div>Internal links and schema opportunities</div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      {auditItems.map((item) => (
+                        <div key={item.title} className="rounded-3xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span
+                              className="rounded-full px-3 py-1 text-xs font-semibold"
+                              style={{ backgroundColor: theme.soft, color: theme.ink }}
+                            >
+                              {item.type}
+                            </span>
+                            <span
+                              className="rounded-full px-3 py-1 text-xs font-semibold"
+                              style={{ backgroundColor: theme.softAccent, color: theme.accent }}
+                            >
+                              {item.priority}
+                            </span>
+                          </div>
+                          <div className="mt-3 text-sm" style={{ color: theme.ink }}>
+                            {item.title}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </SectionCard>
+              </div>
+
+              <div className="space-y-6">
+                <SectionCard
+                  title="Live Mobile Preview"
+                  subtitle="See the active page render in a mobile-first layout using your template system and current inputs."
+                  right={
+                    <div className="rounded-full px-3 py-1 text-xs font-medium" style={{ backgroundColor: theme.soft, color: theme.muted }}>
+                      iPhone Width
+                    </div>
+                  }
+                >
+                  <MobilePreview activePage={activePage} brand={brand} fields={activePageData.fields} />
+                </SectionCard>
+
+                <SectionCard title="Publish Workflow" subtitle="An example of how this app could guide operators from input to live website.">
+                  <div className="space-y-3 text-sm" style={{ color: theme.muted }}>
+                    {[
+                      "1. Operator enables the page they want on the website.",
+                      "2. Structured inputs replace open-ended page building.",
+                      "3. AI applies approved templates, brand settings, and images.",
+                      "4. Team reviews the live mobile preview before publishing.",
+                      "5. Weekly audits suggest ranking, AI, and Business Scanner improvements.",
+                    ].map((step) => (
+                      <div key={step} className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>
+                        {step}
+                      </div>
+                    ))}
+                  </div>
+                </SectionCard>
+
+                <SectionCard title="Prototype Notes" subtitle="This version is ready to demo visually and can be hosted on GitHub Pages.">
+                  <div className="space-y-3 text-sm" style={{ color: theme.muted }}>
+                    <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>Single-file React prototype for quick sharing with your team.</div>
+                    <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>Clickable page navigation and editable page-level inputs.</div>
+                    <div className="rounded-2xl px-4 py-3" style={{ backgroundColor: theme.background }}>Good next step: connect this UI to JSON page schemas and an AI generation service.</div>
+                  </div>
+                </SectionCard>
+              </div>
             </div>
-          </div>
+          )}
         </main>
       </div>
     </div>
