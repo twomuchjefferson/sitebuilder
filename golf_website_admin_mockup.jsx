@@ -841,6 +841,258 @@ function RevenueEngineModuleWorkspace({ module }) {
   );
 }
 
+const nestedModuleConfigs = {
+  Marketing: {
+    Automation: {
+      title: "Automation",
+      subtitle: "Build triggered journeys for abandoned bookings, replay offers, and lifecycle retention.",
+      badge: "8 Active Flows",
+      stats: [["Triggered Today", "184"], ["Conversion Rate", "12.6%"], ["Paused Flows", "2"]],
+      items: [
+        { title: "Abandoned Tee Time Recovery", detail: "Send SMS + email within 20 minutes of a dropped checkout.", status: "Live" },
+        { title: "Twilight Replay Journey", detail: "Promote same-day replay offers to guests who finish before 3 PM.", status: "Testing" },
+        { title: "Membership Lead Nurture", detail: "Three-step sequence for membership inquiry follow-up.", status: "Ready" },
+      ],
+    },
+    Campaigns: {
+      title: "Campaigns",
+      subtitle: "Coordinate seasonal pushes, event promotions, and local growth campaigns.",
+      badge: "5 Campaigns Running",
+      stats: [["Reach", "42.8K"], ["CTR", "4.1%"], ["Attributed Bookings", "96"]],
+      items: [
+        { title: "Spring Kickoff Weekend", detail: "Homepage hero, email drop, and GBP post all aligned for April 12.", status: "Running" },
+        { title: "Corporate Outings Push", detail: "Lead-gen ads and landing page updates for weekday groups.", status: "Scheduled" },
+        { title: "Junior Golf Enrollment", detail: "Local awareness campaign targeting family audiences.", status: "Draft" },
+      ],
+    },
+    "Email Marketing": {
+      title: "Email Marketing",
+      subtitle: "Manage sends, templates, and engagement trends across booking and retention programs.",
+      badge: "22 Templates",
+      stats: [["Open Rate", "38%"], ["Click Rate", "8.9%"], ["Next Send", "Tomorrow 9 AM"]],
+      items: [
+        { title: "Weekend Inventory Alert", detail: "Dynamic send based on tee-sheet gaps for the next 72 hours.", status: "Queued" },
+        { title: "Member Newsletter", detail: "Monthly update featuring events, leagues, and dining specials.", status: "Live" },
+        { title: "Win-Back Series", detail: "Re-engage guests inactive for 45+ days with smart offers.", status: "Optimizing" },
+      ],
+    },
+    Contacts: {
+      title: "Contacts",
+      subtitle: "View audience growth, lead sources, and player profile enrichment.",
+      badge: "18,420 Contacts",
+      stats: [["New This Week", "248"], ["Known Golfers", "71%"], ["Duplicates Flagged", "34"]],
+      items: [
+        { title: "High-Frequency Golfers", detail: "Guests with 4+ rounds in the last 60 days and high replay intent.", status: "Segmented" },
+        { title: "Outings Leads", detail: "Corporate and charity event prospects from paid + organic channels.", status: "Tracked" },
+        { title: "Membership Prospects", detail: "Contacts scored above 80 based on inquiry behavior and spend.", status: "Scored" },
+      ],
+    },
+    Segments: {
+      title: "Segments",
+      subtitle: "Build reusable audiences for campaigns, automations, and reporting.",
+      badge: "31 Saved Segments",
+      stats: [["Largest Segment", "5.2K"], ["Auto-Updated", "26"], ["Synced Audiences", "7"]],
+      items: [
+        { title: "Weekend Public Players", detail: "Guests who book Friday through Sunday at least twice per quarter.", status: "Live" },
+        { title: "Lapsed Membership Leads", detail: "Past inquiries with no activity in the last 90 days.", status: "Ready" },
+        { title: "High-Spend Event Buyers", detail: "Tournament organizers and gift-card purchasers above $500.", status: "Synced" },
+      ],
+    },
+  },
+  "AI Chat": {
+    "Chat History": {
+      title: "Chat History",
+      subtitle: "Review prior AI-assisted conversations, prompts, and operator follow-up.",
+      badge: "184 Conversations",
+      stats: [["Resolved", "82%"], ["Escalated", "14"], ["Avg Response Time", "22 sec"]],
+      items: [
+        { title: "Membership Questions", detail: "Recent AI answers focused on pricing, guest rules, and family plans.", status: "Recent" },
+        { title: "Outings Lead Intake", detail: "Conversation trail tied to tournament planning and catering questions.", status: "Flagged" },
+        { title: "Booking Support Queue", detail: "Past chats filtered by payment, refunds, and booking changes.", status: "Reviewed" },
+      ],
+    },
+    "Official Answers": {
+      title: "Official Answers",
+      subtitle: "Approve canonical responses the AI can reuse across chat and content workflows.",
+      badge: "46 Approved",
+      stats: [["Needs Review", "7"], ["Most Used", "Booking Policy"], ["Last Approved", "Today"]],
+      items: [
+        { title: "Rain Check Policy", detail: "Standardized response for weather interruptions and cart-path-only days.", status: "Approved" },
+        { title: "Dress Code Guidance", detail: "Operator-reviewed wording for golfers and event guests.", status: "Approved" },
+        { title: "Membership Waitlist", detail: "Updated answer reflecting current application timeline.", status: "Pending" },
+      ],
+    },
+    "FAQ Builder": {
+      title: "FAQ Builder",
+      subtitle: "Draft, score, and organize FAQs for website, chat, and search-answer surfaces.",
+      badge: "63 FAQs",
+      stats: [["Published", "41"], ["In Draft", "12"], ["SEO Opportunities", "9"]],
+      items: [
+        { title: "What if weather changes my tee time?", detail: "Expanded answer with rain-check and cancellation guidance.", status: "Published" },
+        { title: "Do you offer junior pricing?", detail: "Awaiting final pricing review from operations team.", status: "Draft" },
+        { title: "Can I host a shotgun start?", detail: "FAQ linked to outings page and AI answers.", status: "Optimized" },
+      ],
+    },
+    "Chat Flows": {
+      title: "Chat Flows",
+      subtitle: "Map conversational sales funnels from intent capture through booking or lead handoff.",
+      badge: "6 Funnel Paths",
+      stats: [["Top Funnel", "Booking Intent"], ["Completion", "34%"], ["Human Hand-Offs", "12"]],
+      items: [
+        { title: "Membership Discovery Funnel", detail: "Qualify interest, collect household info, and route to sales.", status: "Live" },
+        { title: "Event Booking Funnel", detail: "Guide users into outings or weddings based on event type.", status: "Testing" },
+        { title: "General Booking Funnel", detail: "Move players from course questions into tee-time checkout.", status: "Optimizing" },
+      ],
+    },
+    Settings: {
+      title: "AI Chat Settings",
+      subtitle: "Control response behavior, escalation thresholds, and approved data sources.",
+      badge: "Policy Synced",
+      stats: [["Confidence Floor", "82%"], ["Escalation Rules", "9"], ["Knowledge Sources", "14"]],
+      items: [
+        { title: "Escalation Threshold", detail: "Route low-confidence pricing and refund questions to staff.", status: "Enabled" },
+        { title: "Knowledge Source Priority", detail: "Official Answers and FAQ Builder rank above scraped content.", status: "Locked" },
+        { title: "Conversation Retention", detail: "Store chat history for 180 days with role-based access.", status: "Applied" },
+      ],
+    },
+  },
+  Reports: {
+    Booking: {
+      title: "Booking Report",
+      subtitle: "Track tee sheet conversion, booking sources, and realized revenue trends.",
+      badge: "Updated 5 min ago",
+      stats: [["Rounds Booked", "612"], ["Online Mix", "74%"], ["RevPAR", "$91"]],
+      items: [
+        { title: "Source Mix", detail: "Website 54%, widget 20%, phone 18%, clubhouse 8%.", status: "Live" },
+        { title: "Sell-Through Heatmap", detail: "Strongest pickup on Saturday mornings and Thursday twilight.", status: "Stable" },
+        { title: "Cancellation Trend", detail: "7-day cancellation rate down 1.8 points week over week.", status: "Improving" },
+      ],
+    },
+    Website: {
+      title: "Website Report",
+      subtitle: "Monitor traffic, conversion paths, and landing-page performance tied to golf revenue.",
+      badge: "GA4 Synced",
+      stats: [["Sessions", "18.2K"], ["CVR", "3.8%"], ["Top Landing Page", "/golf"]],
+      items: [
+        { title: "Homepage Conversion", detail: "Hero CTA producing the most booking-engine entries.", status: "Healthy" },
+        { title: "Membership Page Engagement", detail: "Average time on page up 22% after FAQ refresh.", status: "Rising" },
+        { title: "Outings Funnel", detail: "Lead form completion strongest from campaign traffic.", status: "Tracked" },
+      ],
+    },
+    Marketing: {
+      title: "Marketing Report",
+      subtitle: "Review campaign efficiency, automation influence, and audience growth across channels.",
+      badge: "Weekly Snapshot",
+      stats: [["Attributed Revenue", "$13.4K"], ["ROAS", "4.7x"], ["Net New Contacts", "248"]],
+      items: [
+        { title: "Email Performance", detail: "Weekend inventory email delivered the strongest assisted bookings.", status: "Leading" },
+        { title: "Paid Campaign Blend", detail: "Search and retargeting driving the majority of qualified traffic.", status: "Balanced" },
+        { title: "Lifecycle Influence", detail: "Automations assisted 19% of all replay bookings this month.", status: "Verified" },
+      ],
+    },
+    Search: {
+      title: "Search Report",
+      subtitle: "Track rankings, local visibility, and query coverage across organic and AI-answer surfaces.",
+      badge: "Search Console Synced",
+      stats: [["Clicks", "9.4K"], ["Impressions", "182K"], ["Avg Position", "9.8"]],
+      items: [
+        { title: "Local Pack Coverage", detail: "Branded tee-time queries remain dominant in top-3 placements.", status: "Strong" },
+        { title: "Non-Branded Growth", detail: "Visibility increased for 'golf outings near me' and related terms.", status: "Growing" },
+        { title: "FAQ Query Wins", detail: "Structured FAQs now contributing to long-tail answer visibility.", status: "Expanded" },
+      ],
+    },
+    Ads: {
+      title: "Ads Report",
+      subtitle: "Measure paid channel performance, spend efficiency, and booking contribution.",
+      badge: "Spend Pacing On Track",
+      stats: [["Spend", "$3,280"], ["CPA", "$34"], ["Bookings", "97"]],
+      items: [
+        { title: "Search Campaign Core", detail: "High-intent branded and tee-time terms driving lowest CPA.", status: "Top Performer" },
+        { title: "Meta Retargeting", detail: "Replay and twilight offers performing best with past bookers.", status: "Stable" },
+        { title: "Creative Rotation", detail: "Three new event ad variants ready for April launch.", status: "Queued" },
+      ],
+    },
+  },
+  "Business Scanner": {
+    "Business Listings": {
+      title: "Business Listings",
+      subtitle: "Manage business profile coverage, location consistency, and listing health signals.",
+      badge: "14 Listings Synced",
+      stats: [["Accurate Listings", "93%"], ["Pending Fixes", "4"], ["Duplicate Risk", "2"]],
+      items: [
+        { title: "Primary Course Listing", detail: "Hours, phone, and booking URL all aligned with website source.", status: "Healthy" },
+        { title: "Outings Venue Listing", detail: "Needs category update and refreshed event imagery.", status: "Needs Update" },
+        { title: "Dining Listing", detail: "Secondary listing tied to grille hours and menu link.", status: "Synced" },
+      ],
+    },
+    Reviews: {
+      title: "Reviews",
+      subtitle: "Track sentiment, response coverage, and trends across recent guest feedback.",
+      badge: "4.6 Avg Rating",
+      stats: [["New Reviews", "18"], ["Response Rate", "89%"], ["Open Escalations", "3"]],
+      items: [
+        { title: "Greens Condition Feedback", detail: "Positive trend after recent maintenance messaging.", status: "Improving" },
+        { title: "Pace of Play Complaints", detail: "Weekend mornings still producing the most negative mentions.", status: "Watch" },
+        { title: "Food & Beverage Praise", detail: "Dining reviews boosting cross-sell confidence.", status: "Strong" },
+      ],
+    },
+    Settings: {
+      title: "Business Scanner Settings",
+      subtitle: "Control sync cadence, alert thresholds, and listing ownership preferences.",
+      badge: "Scanner Active",
+      stats: [["Scan Frequency", "Daily"], ["Alert Rules", "11"], ["Owners", "3"]],
+      items: [
+        { title: "Hours Consistency Alert", detail: "Notify ops when website and listing hours drift apart.", status: "Enabled" },
+        { title: "Review SLA Rule", detail: "Flag reviews without a response after 48 hours.", status: "Applied" },
+        { title: "Category Change Approval", detail: "Require admin approval before listing taxonomy updates.", status: "Protected" },
+      ],
+    },
+  },
+};
+
+function NestedModuleWorkspace({ config }) {
+  if (!config) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-6 p-4 sm:p-6">
+      <SectionCard
+        title={config.title}
+        subtitle={config.subtitle}
+        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.accent }}>{config.badge}</span>}
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          {config.stats.map(([label, value]) => (
+            <div key={label} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.background }}>
+              <div className="text-sm" style={{ color: theme.subtle }}>{label}</div>
+              <div className="mt-2 text-3xl font-semibold">{value}</div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      <SectionCard title={`${config.title} Workspace`} subtitle="Mock operational modules, queues, and status cards for this area.">
+        <div className="space-y-3">
+          {config.items.map((item) => (
+            <div key={item.title} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="font-semibold">{item.title}</div>
+                  <div className="mt-1 text-sm" style={{ color: theme.muted }}>{item.detail}</div>
+                </div>
+                <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.accent }}>
+                  {item.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+
 function GolfWebsiteAdminDashboard() {
   const [pages, setPages] = useState(initialPages);
   const [activePage, setActivePage] = useState("Membership");
@@ -874,6 +1126,7 @@ function GolfWebsiteAdminDashboard() {
   const activeFlyoutItems = flyoutNavItems[activeTopLevel] || [];
   const hasActiveFlyout = activeFlyoutItems.length > 0;
   const activeNestedItem = hasActiveFlyout ? activeFlyoutSelections[activeTopLevel] : null;
+  const activeNestedModuleConfig = nestedModuleConfigs[activeTopLevel]?.[activeNestedItem];
   const isBookingEngineView =
     activeTopLevel === "Revenue Engine" && (activeNestedItem === "Booking Engine" || activeNestedItem === "Smart Pricing AI");
   const isRevenueEngineModuleView =
@@ -1090,6 +1343,8 @@ function GolfWebsiteAdminDashboard() {
             <BookingEngineWorkspace activeTab={activeBookingEngineTab} onTabChange={handleBookingEngineTabChange} />
           ) : isRevenueEngineModuleView ? (
             <RevenueEngineModuleWorkspace module={activeNestedItem} />
+          ) : activeNestedModuleConfig ? (
+            <NestedModuleWorkspace config={activeNestedModuleConfig} />
           ) : (
             <div className="grid grid-cols-1 gap-6 p-4 sm:p-6 2xl:grid-cols-[1.15fr_0.85fr]">
               <div className="space-y-6">
