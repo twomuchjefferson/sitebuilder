@@ -723,6 +723,124 @@ function BookingEngineWorkspace({ activeTab, onTabChange }) {
   );
 }
 
+function RevenueEngineModuleWorkspace({ module }) {
+  const moduleContent = {
+    "Promo Codes": {
+      subtitle: "Create, segment, and monitor promotional codes tied to booking conversion.",
+      badge: "12 Live Codes",
+      stats: [
+        ["Attributed Revenue", "$4,820"],
+        ["Redemption Rate", "18.4%"],
+        ["Next Expiration", "Friday"],
+      ],
+      items: [
+        { title: "SPRING18", detail: "18% off weekday public rounds | Expires Apr 30", status: "Live" },
+        { title: "TWILIGHT2X", detail: "2-for-1 after 4 PM | Member guest excluded", status: "Scheduled" },
+        { title: "WELCOME9", detail: "$9 off first online booking | Widget + website", status: "Testing" },
+      ],
+    },
+    "Gift Cards": {
+      subtitle: "Manage digital and clubhouse gift card inventory, balances, and fulfillment flow.",
+      badge: "324 Sold YTD",
+      stats: [
+        ["Outstanding Balance", "$12,460"],
+        ["Avg Card Value", "$78"],
+        ["Digital Delivery", "94%"],
+      ],
+      items: [
+        { title: "Spring Collection", detail: "Email-first gift card design with same-day scheduling", status: "Primary" },
+        { title: "Corporate Packs", detail: "Bulk purchase flow for tournaments and outings", status: "Active" },
+        { title: "Balance Reminder", detail: "Automated reminder at 60 and 14 days", status: "Enabled" },
+      ],
+    },
+    "Wait List": {
+      subtitle: "Track open demand and automate replacement booking for sold-out tee times.",
+      badge: "28 Guests Waiting",
+      stats: [
+        ["Open Requests", "28"],
+        ["Auto-Fills Today", "9"],
+        ["Peak Window", "8:00-10:30 AM"],
+      ],
+      items: [
+        { title: "Saturday Morning Queue", detail: "12 foursomes requesting openings before 10 AM", status: "Hot" },
+        { title: "Twosome Backfill Rule", detail: "Pair partial inventory with singles after 2 PM", status: "Active" },
+        { title: "SMS Confirmation Flow", detail: "10-minute claim window before queue advances", status: "Live" },
+      ],
+    },
+    Lottery: {
+      subtitle: "Configure high-demand drawing windows, allocation logic, and release controls.",
+      badge: "2 Draws This Week",
+      stats: [
+        ["Pending Entries", "146"],
+        ["Release Window", "3:00 PM"],
+        ["Member Events", "4"],
+      ],
+      items: [
+        { title: "Saturday Member Draw", detail: "Weighted for full-season members with guest cap of 1", status: "Open" },
+        { title: "Holiday Release Rule", detail: "Unclaimed inventory moves to wait list after draw close", status: "Ready" },
+        { title: "Audit Trail", detail: "Store draw seed, participants, and fulfillment outcomes", status: "Enabled" },
+      ],
+    },
+    "Checkout Upsells": {
+      subtitle: "Merchandise add-ons, replay offers, and booking-path upgrades at checkout.",
+      badge: "22% Attach Rate",
+      stats: [
+        ["Avg Upsell Order", "$18"],
+        ["Top Offer", "Replay 9"],
+        ["A/B Tests", "3 Active"],
+      ],
+      items: [
+        { title: "Replay 9 Add-On", detail: "Offer second loop after 1 PM with same-day discount", status: "Top Performer" },
+        { title: "Range Bucket Bundle", detail: "Attach practice balls to public prime rounds", status: "Live" },
+        { title: "Cart Upgrade Prompt", detail: "Premium cart message shown on high-heat days", status: "Testing" },
+      ],
+    },
+  };
+
+  const config = moduleContent[module];
+
+  if (!config) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-6 p-4 sm:p-6">
+      <SectionCard
+        title={module}
+        subtitle={config.subtitle}
+        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.accent }}>{config.badge}</span>}
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          {config.stats.map(([label, value]) => (
+            <div key={label} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.background }}>
+              <div className="text-sm" style={{ color: theme.subtle }}>{label}</div>
+              <div className="mt-2 text-3xl font-semibold">{value}</div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      <SectionCard title={`${module} Workspace`} subtitle="Mock operational modules and status cards for this revenue tool.">
+        <div className="space-y-3">
+          {config.items.map((item) => (
+            <div key={item.title} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="font-semibold">{item.title}</div>
+                  <div className="mt-1 text-sm" style={{ color: theme.muted }}>{item.detail}</div>
+                </div>
+                <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.accent }}>
+                  {item.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+
 function GolfWebsiteAdminDashboard() {
   const [pages, setPages] = useState(initialPages);
   const [activePage, setActivePage] = useState("Membership");
@@ -756,7 +874,11 @@ function GolfWebsiteAdminDashboard() {
   const activeFlyoutItems = flyoutNavItems[activeTopLevel] || [];
   const hasActiveFlyout = activeFlyoutItems.length > 0;
   const activeNestedItem = hasActiveFlyout ? activeFlyoutSelections[activeTopLevel] : null;
-  const isBookingEngineView = activeTopLevel === "Revenue Engine" && activeNestedItem === "Booking Engine";
+  const isBookingEngineView =
+    activeTopLevel === "Revenue Engine" && (activeNestedItem === "Booking Engine" || activeNestedItem === "Smart Pricing AI");
+  const isRevenueEngineModuleView =
+    activeTopLevel === "Revenue Engine" &&
+    ["Promo Codes", "Gift Cards", "Wait List", "Lottery", "Checkout Upsells"].includes(activeNestedItem);
   const activeModuleTitle = activeNestedItem || activeTopLevel;
   const activeModuleDescription = hasActiveFlyout
     ? `${topLevelDescriptions[activeTopLevel]} Secondary navigation is available in the expanded accordion menu.`
@@ -807,10 +929,29 @@ function GolfWebsiteAdminDashboard() {
   };
 
   const selectFlyoutItem = (item) => {
+    if (activeTopLevel === "Revenue Engine") {
+      if (item === "Smart Pricing AI") {
+        setActiveBookingEngineTab("Smart Pricing AI");
+      } else if (item === "Booking Engine") {
+        setActiveBookingEngineTab("Setup");
+      }
+    }
+
     setActiveFlyoutSelections((prev) => ({
       ...prev,
       [activeTopLevel]: item,
     }));
+  };
+
+  const handleBookingEngineTabChange = (tab) => {
+    setActiveBookingEngineTab(tab);
+
+    if (activeTopLevel === "Revenue Engine") {
+      setActiveFlyoutSelections((prev) => ({
+        ...prev,
+        "Revenue Engine": tab === "Smart Pricing AI" ? "Smart Pricing AI" : "Booking Engine",
+      }));
+    }
   };
 
   return (
@@ -946,7 +1087,9 @@ function GolfWebsiteAdminDashboard() {
           </div>
 
           {isBookingEngineView ? (
-            <BookingEngineWorkspace activeTab={activeBookingEngineTab} onTabChange={setActiveBookingEngineTab} />
+            <BookingEngineWorkspace activeTab={activeBookingEngineTab} onTabChange={handleBookingEngineTabChange} />
+          ) : isRevenueEngineModuleView ? (
+            <RevenueEngineModuleWorkspace module={activeNestedItem} />
           ) : (
             <div className="grid grid-cols-1 gap-6 p-4 sm:p-6 2xl:grid-cols-[1.15fr_0.85fr]">
               <div className="space-y-6">
