@@ -123,6 +123,7 @@ const flyoutNavItems = {
   "Website Admin": ["Brand Settings", "Page Controls", "AI Content Engine", "SEO and AI Audit", "Publishing"],
   "AI Chat": ["Chat History", "Official Answers", "FAQ Builder", "Chat Flows", "Settings"],
   Reports: ["Booking", "Website", "Marketing", "Search", "Ads"],
+  "Business Scanner": ["Business Listings", "Reviews", "Settings"],
 };
 
 const bottomMenuItems = ["Account", "Live Booking", "Support", "Sign Out"];
@@ -265,6 +266,100 @@ function SelectField({ label, value, onChange, options }) {
   );
 }
 
+function MenuIcon({ item, active = false }) {
+  const stroke = active ? theme.accent : theme.darkMuted;
+  const props = {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke,
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    className: "h-[18px] w-[18px]",
+  };
+
+  const icons = {
+    Dashboard: (
+      <svg {...props}>
+        <rect x="4" y="4" width="7" height="7" rx="1.5" />
+        <rect x="13" y="4" width="7" height="5" rx="1.5" />
+        <rect x="4" y="13" width="7" height="7" rx="1.5" />
+        <rect x="13" y="11" width="7" height="9" rx="1.5" />
+      </svg>
+    ),
+    "Revenue Engine": (
+      <svg {...props}>
+        <path d="M5 17V7" />
+        <path d="M12 17V10" />
+        <path d="M19 17V5" />
+        <path d="M4 19h16" />
+      </svg>
+    ),
+    Marketing: (
+      <svg {...props}>
+        <path d="M4 13h3l9 4V7l-9 4H4z" />
+        <path d="M7 13v4a2 2 0 0 0 2 2h1" />
+        <path d="M19 9a3 3 0 0 1 0 6" />
+      </svg>
+    ),
+    "Website Admin": (
+      <svg {...props}>
+        <rect x="3.5" y="5" width="17" height="14" rx="2" />
+        <path d="M3.5 9.5h17" />
+        <path d="M8 15h4" />
+      </svg>
+    ),
+    "AI Chat": (
+      <svg {...props}>
+        <path d="M7 18l-3 2v-5.5A4.5 4.5 0 0 1 8.5 10h7A4.5 4.5 0 0 1 20 14.5v0A4.5 4.5 0 0 1 15.5 19H9" />
+        <path d="M9 6h.01" />
+        <path d="M12 4l.8 1.7L14.5 6.5l-1.7.8L12 9l-.8-1.7-1.7-.8 1.7-.8z" />
+      </svg>
+    ),
+    Reports: (
+      <svg {...props}>
+        <path d="M5 19V9" />
+        <path d="M10 19V5" />
+        <path d="M15 19v-7" />
+        <path d="M20 19v-4" />
+      </svg>
+    ),
+    "Business Scanner": (
+      <svg {...props}>
+        <circle cx="11" cy="11" r="5.5" />
+        <path d="M20 20l-4.2-4.2" />
+        <path d="M11 8.5v5" />
+        <path d="M8.5 11H13.5" />
+      </svg>
+    ),
+    Help: (
+      <svg {...props}>
+        <circle cx="12" cy="12" r="8" />
+        <path d="M9.75 9.25a2.5 2.5 0 1 1 4 2c-.8.6-1.75 1.2-1.75 2.5" />
+        <path d="M12 16.75h.01" />
+      </svg>
+    ),
+  };
+
+  return icons[item] || icons.Dashboard;
+}
+
+function ChevronIcon({ open }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`h-4 w-4 transition ${open ? "rotate-180" : ""}`}
+    >
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
+
 function MobilePreview({ activePage, brand, fields }) {
   const accentStyle = { backgroundColor: brand.accentColor };
   const buttonTextStyle = { color: brand.buttonTextColor };
@@ -404,6 +499,7 @@ function GolfWebsiteAdminDashboard() {
     "Website Admin": "Page Controls",
     "AI Chat": "Chat History",
     Reports: "Booking",
+    "Business Scanner": "Business Listings",
   });
   const [brand, setBrand] = useState({
     courseName: "Demo Golf Club",
@@ -427,7 +523,7 @@ function GolfWebsiteAdminDashboard() {
   const activeNestedItem = hasActiveFlyout ? activeFlyoutSelections[activeTopLevel] : null;
   const activeModuleTitle = activeNestedItem || activeTopLevel;
   const activeModuleDescription = hasActiveFlyout
-    ? `${topLevelDescriptions[activeTopLevel]} Secondary navigation is mocked in the flyout menu.`
+    ? `${topLevelDescriptions[activeTopLevel]} Secondary navigation is available in the expanded accordion menu.`
     : `${topLevelDescriptions[activeTopLevel]} The main canvas remains focused on Website Admin tools in this prototype.`;
 
   const updatePageField = (fieldName, value) => {
@@ -510,54 +606,60 @@ function GolfWebsiteAdminDashboard() {
               <div className="mb-3 px-2 text-xs uppercase tracking-[0.24em]" style={{ color: theme.darkSubtle }}>
                 Platform
               </div>
-              {topLevelNavItems.map((item) => (
-                <button
-                  key={item}
-                  onClick={() => selectTopLevelItem(item)}
-                  className="mb-2 flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm transition"
-                  style={
-                    activeTopLevel === item
-                      ? { backgroundColor: theme.background, color: theme.ink, boxShadow: "0 10px 30px rgba(2, 6, 24, 0.25)" }
-                      : { color: theme.darkMuted }
-                  }
-                  >
-                  <span>{item}</span>
-                  {flyoutNavItems[item] ? <span className="text-xs">{activeTopLevel === item ? "Open" : "Flyout"}</span> : null}
-                </button>
-              ))}
+              {topLevelNavItems.map((item) => {
+                const hasChildren = Boolean(flyoutNavItems[item]);
+                const isActive = activeTopLevel === item;
+
+                return (
+                  <div key={item} className="mb-2">
+                    <button
+                      onClick={() => selectTopLevelItem(item)}
+                      className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm transition"
+                      style={
+                        isActive
+                          ? { backgroundColor: theme.background, color: theme.ink, boxShadow: "0 10px 30px rgba(2, 6, 24, 0.25)" }
+                          : { color: theme.darkMuted }
+                      }
+                    >
+                      <span className="flex items-center gap-3">
+                        <span
+                          className="flex h-9 w-9 items-center justify-center rounded-2xl"
+                          style={isActive ? { backgroundColor: theme.softAccent } : { backgroundColor: theme.darkHover }}
+                        >
+                          <MenuIcon item={item} active={isActive} />
+                        </span>
+                        <span>{item}</span>
+                      </span>
+                      {hasChildren ? <ChevronIcon open={isActive} /> : null}
+                    </button>
+
+                    {hasChildren && isActive ? (
+                      <div
+                        className="mt-2 space-y-2 rounded-3xl px-3 py-3"
+                        style={{ backgroundColor: "rgba(241, 245, 249, 0.06)", border: `1px solid ${theme.darkBorder}` }}
+                      >
+                        {flyoutNavItems[item].map((nestedItem) => (
+                          <button
+                            key={nestedItem}
+                            onClick={() => selectFlyoutItem(nestedItem)}
+                            className="w-full rounded-2xl px-4 py-3 text-left text-sm transition"
+                            style={
+                              activeNestedItem === nestedItem
+                                ? { backgroundColor: theme.accent, color: theme.white, fontWeight: 600 }
+                                : { color: theme.darkMuted }
+                            }
+                          >
+                            {nestedItem}
+                          </button>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
             </nav>
 
-            {hasActiveFlyout ? (
-              <div
-                className="border-t px-3 py-4 xl:absolute xl:left-[calc(100%-0.75rem)] xl:top-24 xl:z-20 xl:w-64 xl:rounded-3xl xl:border xl:p-3 xl:shadow-2xl"
-                style={{ borderColor: theme.darkBorder, backgroundColor: theme.ink }}
-              >
-                <div className="mb-3 px-2">
-                  <div className="text-xs uppercase tracking-[0.24em]" style={{ color: theme.darkSubtle }}>
-                    {activeTopLevel}
-                  </div>
-                  <div className="mt-1 text-sm" style={{ color: theme.darkMuted }}>
-                    Secondary Flyout Menu
-                  </div>
-                </div>
-                {activeFlyoutItems.map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => selectFlyoutItem(item)}
-                    className="mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition"
-                    style={
-                      activeNestedItem === item
-                        ? { backgroundColor: theme.accent, color: theme.white, fontWeight: 600 }
-                        : { backgroundColor: "rgba(241, 245, 249, 0.06)", color: theme.darkMuted }
-                    }
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            ) : null}
-
-            <div className={`flex-1 ${hasActiveFlyout ? "xl:pb-60" : ""}`} />
+            <div className="flex-1" />
 
             <div
               className="border-t px-3 py-4 xl:sticky xl:bottom-0 xl:mt-auto"
