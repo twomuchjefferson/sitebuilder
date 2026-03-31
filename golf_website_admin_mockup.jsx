@@ -504,6 +504,518 @@ function PageFieldEditor({ activePage, pageData, onFieldChange }) {
   );
 }
 
+function ScenarioSandboxWorkspace() {
+  const [scenarioPreset, setScenarioPreset] = useState("Balanced");
+
+  const scenarioData = {
+    Conservative: {
+      controls: {
+        bookingPace: 42,
+        weather: 28,
+        traffic: 36,
+        elasticity: 34,
+        history: 62,
+        yield: 40,
+      },
+      summary: {
+        currentAvg: "$62",
+        proposedAvg: "$64",
+        lift: "+3.1%",
+        occupancy: "-0.3%",
+        highDemand: "9",
+        confidence: "Medium",
+      },
+      rows: [
+        { time: "7:30 AM", current: 74, proposed: 78, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Favorable", confidence: "High", why: "Prime morning slot with low inventory" },
+        { time: "7:40 AM", current: 74, proposed: 78, inventory: "3 left", pace: "Ahead", traffic: "High", weather: "Favorable", confidence: "High", why: "Ahead of normal pace + strong traffic" },
+        { time: "8:00 AM", current: 78, proposed: 82, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Neutral", confidence: "High", why: "Historical high-demand hour" },
+        { time: "8:20 AM", current: 82, proposed: 85, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Neutral", confidence: "High", why: "Low inventory with stable weather" },
+        { time: "9:00 AM", current: 84, proposed: 86, inventory: "4 left", pace: "On Track", traffic: "Medium", weather: "Neutral", confidence: "Medium", why: "Steady pace with modest pressure" },
+        { time: "10:10 AM", current: 76, proposed: 77, inventory: "6 left", pace: "On Track", traffic: "Medium", weather: "Favorable", confidence: "Medium", why: "Mild weather supports a small lift" },
+        { time: "11:30 AM", current: 68, proposed: 68, inventory: "8 left", pace: "On Track", traffic: "Medium", weather: "Neutral", confidence: "Low", why: "Signals are balanced and unchanged" },
+        { time: "1:10 PM", current: 58, proposed: 56, inventory: "12 left", pace: "Behind", traffic: "Low", weather: "Neutral", confidence: "Medium", why: "Weak pace and softer demand" },
+      ],
+      drivers: [
+        "Morning tee times are booking 11% ahead of typical pace.",
+        "Website traffic is elevated across 7:30 AM-9:30 AM slots.",
+        "Historical Saturday demand supports moderate upward pressure.",
+        "Afternoon demand remains soft with higher available inventory.",
+      ],
+      factorWeights: [
+        ["Booking Pace", 72],
+        ["Historical Demand", 64],
+        ["Website Traffic", 58],
+        ["Weather", 36],
+      ],
+    },
+    Balanced: {
+      controls: {
+        bookingPace: 58,
+        weather: 44,
+        traffic: 52,
+        elasticity: 49,
+        history: 68,
+        yield: 54,
+      },
+      summary: {
+        currentAvg: "$62",
+        proposedAvg: "$66",
+        lift: "+6.4%",
+        occupancy: "-0.8%",
+        highDemand: "14",
+        confidence: "Medium-High",
+      },
+      rows: [
+        { time: "7:30 AM", current: 74, proposed: 82, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Favorable", confidence: "High", why: "Ahead of normal pace + strong traffic" },
+        { time: "7:40 AM", current: 74, proposed: 83, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Favorable", confidence: "High", why: "Prime morning slot with strong intent signals" },
+        { time: "7:50 AM", current: 76, proposed: 84, inventory: "3 left", pace: "Ahead", traffic: "High", weather: "Favorable", confidence: "High", why: "Historical high-demand hour" },
+        { time: "8:00 AM", current: 78, proposed: 87, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Neutral", confidence: "High", why: "Low inventory and elevated booking pace" },
+        { time: "8:20 AM", current: 82, proposed: 90, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Neutral", confidence: "High", why: "High demand compression in premium morning band" },
+        { time: "8:40 AM", current: 82, proposed: 89, inventory: "3 left", pace: "Ahead", traffic: "High", weather: "Neutral", confidence: "High", why: "Strong views and above-normal pace" },
+        { time: "9:10 AM", current: 84, proposed: 88, inventory: "4 left", pace: "On Track", traffic: "Medium", weather: "Neutral", confidence: "Medium", why: "Steady pace with premium willingness-to-pay" },
+        { time: "10:10 AM", current: 76, proposed: 79, inventory: "6 left", pace: "On Track", traffic: "Medium", weather: "Favorable", confidence: "Medium", why: "Mild weather supports upward pricing pressure" },
+        { time: "11:30 AM", current: 68, proposed: 69, inventory: "8 left", pace: "On Track", traffic: "Medium", weather: "Neutral", confidence: "Low", why: "Signals are stable with minimal adjustment" },
+        { time: "1:10 PM", current: 58, proposed: 54, inventory: "12 left", pace: "Behind", traffic: "Low", weather: "Neutral", confidence: "Medium", why: "Weak pace and softer demand" },
+        { time: "2:20 PM", current: 52, proposed: 49, inventory: "14 left", pace: "Behind", traffic: "Low", weather: "Weak", confidence: "Medium", why: "Weather headwind offset by low intent" },
+        { time: "3:40 PM", current: 46, proposed: 44, inventory: "18 left", pace: "Behind", traffic: "Low", weather: "Weak", confidence: "Low", why: "Late-day softness and lighter conversion signals" },
+      ],
+      drivers: [
+        "Morning tee times are booking 18% ahead of typical pace.",
+        "Tee-sheet views are elevated for 8:00 AM-11:00 AM.",
+        "Saturday demand patterns suggest premium willingness-to-pay.",
+        "Mild weather supports upward pricing pressure.",
+        "Afternoon shoulder hours remain soft and mostly unchanged.",
+      ],
+      factorWeights: [
+        ["Booking Pace", 82],
+        ["Historical Demand", 71],
+        ["Website Traffic", 67],
+        ["Weather", 46],
+      ],
+    },
+    Aggressive: {
+      controls: {
+        bookingPace: 74,
+        weather: 56,
+        traffic: 68,
+        elasticity: 66,
+        history: 78,
+        yield: 72,
+      },
+      summary: {
+        currentAvg: "$62",
+        proposedAvg: "$69",
+        lift: "+9.8%",
+        occupancy: "-1.6%",
+        highDemand: "18",
+        confidence: "Medium",
+      },
+      rows: [
+        { time: "7:30 AM", current: 74, proposed: 85, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Favorable", confidence: "High", why: "Strong pace with aggressive demand capture" },
+        { time: "7:40 AM", current: 74, proposed: 86, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Favorable", confidence: "High", why: "Prime slot with elevated intent and low supply" },
+        { time: "7:50 AM", current: 76, proposed: 88, inventory: "3 left", pace: "Ahead", traffic: "High", weather: "Favorable", confidence: "High", why: "Historical high-demand hour" },
+        { time: "8:00 AM", current: 78, proposed: 91, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Neutral", confidence: "High", why: "Low inventory plus strong booking velocity" },
+        { time: "8:20 AM", current: 82, proposed: 94, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Neutral", confidence: "High", why: "Premium morning slot with compressed supply" },
+        { time: "8:40 AM", current: 82, proposed: 93, inventory: "3 left", pace: "Ahead", traffic: "High", weather: "Neutral", confidence: "High", why: "Intent signals justify more assertive lift" },
+        { time: "9:10 AM", current: 84, proposed: 90, inventory: "4 left", pace: "Ahead", traffic: "Medium", weather: "Neutral", confidence: "Medium", why: "Pace remains stronger than historical average" },
+        { time: "10:10 AM", current: 76, proposed: 81, inventory: "6 left", pace: "On Track", traffic: "Medium", weather: "Favorable", confidence: "Medium", why: "Weather and elasticity learning encourage a lift" },
+        { time: "11:30 AM", current: 68, proposed: 70, inventory: "8 left", pace: "On Track", traffic: "Medium", weather: "Neutral", confidence: "Low", why: "Small move with moderate confidence" },
+        { time: "1:10 PM", current: 58, proposed: 53, inventory: "12 left", pace: "Behind", traffic: "Low", weather: "Neutral", confidence: "Medium", why: "Weak pace and lower demand confidence" },
+        { time: "2:20 PM", current: 52, proposed: 47, inventory: "14 left", pace: "Behind", traffic: "Low", weather: "Weak", confidence: "Medium", why: "Soft pace and weather pressure" },
+        { time: "3:40 PM", current: 46, proposed: 42, inventory: "18 left", pace: "Behind", traffic: "Low", weather: "Weak", confidence: "Low", why: "Late-day softness with lower booking intent" },
+      ],
+      drivers: [
+        "Morning demand is materially above historical norms and inventory is tightening.",
+        "Website traffic and booking intent are peaking across prime tee times.",
+        "Elasticity learning suggests golfers remain tolerant of moderate upward moves.",
+        "Yield pressure is elevated due to strong Saturday compression.",
+        "Afternoon slots still soften due to weaker pace and weather drag.",
+      ],
+      factorWeights: [
+        ["Booking Pace", 90],
+        ["Historical Demand", 79],
+        ["Website Traffic", 74],
+        ["Weather", 52],
+      ],
+    },
+    Custom: {
+      controls: {
+        bookingPace: 61,
+        weather: 38,
+        traffic: 57,
+        elasticity: 48,
+        history: 63,
+        yield: 59,
+      },
+      summary: {
+        currentAvg: "$62",
+        proposedAvg: "$65",
+        lift: "+5.7%",
+        occupancy: "-0.6%",
+        highDemand: "13",
+        confidence: "Medium",
+      },
+      rows: [
+        { time: "7:30 AM", current: 74, proposed: 81, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Favorable", confidence: "High", why: "Strong pace and low inventory" },
+        { time: "7:40 AM", current: 74, proposed: 82, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Favorable", confidence: "High", why: "Prime slot with strong traffic" },
+        { time: "8:00 AM", current: 78, proposed: 86, inventory: "2 left", pace: "Ahead", traffic: "High", weather: "Neutral", confidence: "High", why: "Historical demand plus current pace" },
+        { time: "8:20 AM", current: 82, proposed: 88, inventory: "3 left", pace: "Ahead", traffic: "High", weather: "Neutral", confidence: "Medium", why: "High intent, but smaller elasticity influence" },
+        { time: "9:10 AM", current: 84, proposed: 87, inventory: "4 left", pace: "On Track", traffic: "Medium", weather: "Neutral", confidence: "Medium", why: "Balanced signals support a modest lift" },
+        { time: "10:10 AM", current: 76, proposed: 78, inventory: "6 left", pace: "On Track", traffic: "Medium", weather: "Favorable", confidence: "Medium", why: "Weather supports a small increase" },
+        { time: "11:30 AM", current: 68, proposed: 68, inventory: "8 left", pace: "On Track", traffic: "Medium", weather: "Neutral", confidence: "Low", why: "No strong pricing pressure" },
+        { time: "1:10 PM", current: 58, proposed: 55, inventory: "12 left", pace: "Behind", traffic: "Low", weather: "Neutral", confidence: "Medium", why: "Weak pace and softer afternoon demand" },
+      ],
+      drivers: [
+        "Morning pace remains above trend, but settings moderate the upward response.",
+        "Traffic contributes meaningfully to prime-time price lifts.",
+        "Historical demand still anchors the strongest morning recommendations.",
+        "Afternoon slots remain mostly stable or slightly softer.",
+      ],
+      factorWeights: [
+        ["Booking Pace", 78],
+        ["Historical Demand", 66],
+        ["Website Traffic", 69],
+        ["Weather", 34],
+      ],
+    },
+  };
+
+  const currentScenario = scenarioData[scenarioPreset];
+  const priceRows = currentScenario.rows;
+  const chartWidth = 620;
+  const chartHeight = 220;
+  const padding = 24;
+  const currentValues = priceRows.map((row) => row.current);
+  const proposedValues = priceRows.map((row) => row.proposed);
+  const maxValue = Math.max(...currentValues, ...proposedValues) + 6;
+  const minValue = Math.min(...currentValues, ...proposedValues) - 6;
+  const xForIndex = (index) => padding + (index * (chartWidth - padding * 2)) / Math.max(priceRows.length - 1, 1);
+  const yForValue = (value) =>
+    chartHeight - padding - ((value - minValue) / Math.max(maxValue - minValue, 1)) * (chartHeight - padding * 2);
+  const currentLine = priceRows.map((row, index) => `${xForIndex(index)},${yForValue(row.current)}`).join(" ");
+  const proposedLine = priceRows.map((row, index) => `${xForIndex(index)},${yForValue(row.proposed)}`).join(" ");
+  const pricingSubnav = ["Overview", "Rules / Profiles", "Scenario Sandbox", "History / Change Log"];
+  const scenarioCards = ["Conservative", "Balanced", "Aggressive", "Custom"];
+  const guardrails = [
+    "Max increase per refresh: +8%",
+    "Max decrease per refresh: -10%",
+    "Rate floor: $38",
+    "Rate ceiling: $110",
+    "Weather can reduce price by no more than 12%",
+    "Low-confidence slots default to smaller changes",
+  ];
+
+  const renderSignalPill = (label, tone = "neutral") => {
+    const styles = {
+      positive: { backgroundColor: theme.softAccent, color: theme.ink },
+      warning: { backgroundColor: theme.soft, color: theme.ink },
+      neutral: { backgroundColor: theme.white, color: theme.muted, border: `1px solid ${theme.border}` },
+    };
+
+    return (
+      <span className="rounded-full px-3 py-1 text-xs font-semibold" style={styles[tone] || styles.neutral}>
+        {label}
+      </span>
+    );
+  };
+
+  return (
+    <div className="space-y-6 p-4 sm:p-6">
+      <SectionCard
+        title="Scenario Sandbox"
+        subtitle="Preview how pricing may shift based on pace, weather, traffic, and demand sensitivity before publishing live rates."
+        right={
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.ink }}>
+              Preview Only
+            </span>
+            <button className="rounded-2xl px-4 py-2 text-sm font-medium" style={{ border: `1px solid ${theme.border}`, color: theme.ink }}>
+              Reset
+            </button>
+            <button className="rounded-2xl px-4 py-2 text-sm font-medium" style={{ border: `1px solid ${theme.border}`, color: theme.ink }}>
+              Save Scenario
+            </button>
+            <button className="rounded-2xl px-4 py-2 text-sm font-medium" style={{ border: `1px solid ${theme.border}`, color: theme.ink }}>
+              Preview Tomorrow
+            </button>
+            <button className="rounded-2xl px-4 py-2 text-sm font-medium" style={{ backgroundColor: theme.soft, color: theme.muted }}>
+              Publish Prices
+            </button>
+          </div>
+        }
+      >
+        <div className="mt-2 flex flex-wrap gap-2">
+          {pricingSubnav.map((item) => (
+            <span
+              key={item}
+              className="rounded-full px-3 py-2 text-xs font-semibold"
+              style={item === "Scenario Sandbox" ? { backgroundColor: theme.accent, color: theme.white } : { backgroundColor: theme.soft, color: theme.muted }}
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+        <div className="mt-4 rounded-2xl border px-4 py-3 text-sm" style={{ borderColor: theme.border, backgroundColor: theme.white, color: theme.muted }}>
+          Current published pricing remains unchanged until you publish. This sandbox is a safe preview area for testing tomorrow's pricing logic.
+        </div>
+      </SectionCard>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {scenarioCards.map((preset) => {
+          const isActive = scenarioPreset === preset;
+          const presetSummary = scenarioData[preset].summary;
+
+          return (
+            <button
+              key={preset}
+              onClick={() => setScenarioPreset(preset)}
+              className="rounded-3xl border p-4 text-left transition"
+              style={
+                isActive
+                  ? { borderColor: theme.accent, backgroundColor: theme.softAccent }
+                  : { borderColor: theme.border, backgroundColor: theme.surface }
+              }
+            >
+              <div className="font-semibold">{preset}</div>
+              <div className="mt-2 text-sm" style={{ color: theme.muted }}>
+                Avg {presetSummary.proposedAvg} | Lift {presetSummary.lift}
+              </div>
+              <div className="mt-3 text-xs font-semibold" style={{ color: theme.subtle }}>
+                {preset === "Custom" ? "Sliders active" : "Compare to current"}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="grid gap-6 2xl:grid-cols-[320px_1fr_320px]">
+        <div className="space-y-6">
+          <SectionCard title="Scenario Controls" subtitle="Adjust how aggressively the system responds to tomorrow's signals.">
+            <div className="space-y-4">
+              <SelectField label="Profile Preset" value={scenarioPreset} onChange={(e) => setScenarioPreset(e.target.value)} options={scenarioCards} />
+              <SelectField label="Date" value="Tomorrow" onChange={() => {}} options={["Tomorrow", "Saturday", "Sunday", "Custom Date"]} />
+              <SelectField label="Course" value="Demo Golf Club" onChange={() => {}} options={["Demo Golf Club", "North Course", "South Course"]} />
+              <SelectField label="Rate Type" value="Public Rates" onChange={() => {}} options={["Public Rates", "Member Guest", "Twilight", "Replay"]} />
+              <SelectField label="Time Band" value="Full Day" onChange={() => {}} options={["Full Day", "Morning Prime", "Midday", "Afternoon"]} />
+            </div>
+
+            <div className="mt-6 space-y-4">
+              {[
+                ["Booking Pace Sensitivity", currentScenario.controls.bookingPace, "Conservative", "Aggressive"],
+                ["Weather Sensitivity", currentScenario.controls.weather, "Low", "High"],
+                ["Website Traffic Sensitivity", currentScenario.controls.traffic, "Low", "High"],
+                ["Elasticity Learning Influence", currentScenario.controls.elasticity, "Low", "High"],
+                ["Historical Demand Weight", currentScenario.controls.history, "Low", "High"],
+                ["Yield Pressure Weight", currentScenario.controls.yield, "Low", "High"],
+              ].map(([label, value, left, right]) => (
+                <div key={label}>
+                  <div className="mb-2 flex items-center justify-between text-sm">
+                    <span>{label}</span>
+                    <span style={{ color: theme.muted }}>{value}</span>
+                  </div>
+                  <input key={`${scenarioPreset}-${label}`} type="range" min="0" max="100" defaultValue={value} className="w-full accent-[#2563EB]" />
+                  <div className="mt-1 flex justify-between text-xs" style={{ color: theme.subtle }}>
+                    <span>{left}</span>
+                    <span>{right}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 rounded-3xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.background }}>
+              <div className="text-sm font-semibold">Smart Base Rate Inputs</div>
+              <div className="mt-3 space-y-3 text-sm" style={{ color: theme.muted }}>
+                <div className="flex items-center justify-between"><span>Base Rate Strategy</span><span>Historical</span></div>
+                <div className="flex items-center justify-between"><span>Season</span><span>Peak</span></div>
+                <div className="flex items-center justify-between"><span>Known High Demand Inputs</span><span>On</span></div>
+                <div className="flex items-center justify-between"><span>Historical High Demand Detection</span><span>On</span></div>
+              </div>
+            </div>
+          </SectionCard>
+        </div>
+
+        <div className="space-y-6">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {[
+              ["Current Avg Rate", currentScenario.summary.currentAvg],
+              ["Proposed Avg Rate", currentScenario.summary.proposedAvg],
+              ["Projected Revenue Lift", currentScenario.summary.lift],
+              ["Projected Occupancy Impact", currentScenario.summary.occupancy],
+              ["High Demand Slots Identified", currentScenario.summary.highDemand],
+              ["Confidence Level", currentScenario.summary.confidence],
+            ].map(([label, value]) => (
+              <SectionCard key={label} title={label}>
+                <div className="text-3xl font-bold">{value}</div>
+              </SectionCard>
+            ))}
+          </div>
+
+          <SectionCard
+            title="Current vs Proposed Price by Tee Time"
+            subtitle="Compare current published pricing against the scenario preview for the selected date."
+            right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.muted }}>Preview generated successfully</span>}
+          >
+            <div className="overflow-x-auto">
+              <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="h-[260px] w-full min-w-[620px]">
+                {[0, 1, 2, 3].map((step) => {
+                  const value = minValue + ((maxValue - minValue) / 3) * step;
+                  const y = yForValue(value);
+
+                  return (
+                    <g key={step}>
+                      <line x1={padding} y1={y} x2={chartWidth - padding} y2={y} stroke={theme.border} strokeWidth="1" />
+                      <text x="2" y={y + 4} fontSize="11" fill={theme.muted}>{`$${Math.round(value)}`}</text>
+                    </g>
+                  );
+                })}
+                <polyline fill="none" stroke={theme.subtle} strokeWidth="3" points={currentLine} />
+                <polyline fill="none" stroke={theme.accent} strokeWidth="3" points={proposedLine} />
+                {priceRows.map((row, index) => (
+                  <g key={row.time}>
+                    <circle cx={xForIndex(index)} cy={yForValue(row.current)} r="4" fill={theme.surface} stroke={theme.subtle} strokeWidth="2" />
+                    <circle cx={xForIndex(index)} cy={yForValue(row.proposed)} r="4" fill={theme.white} stroke={theme.accent} strokeWidth="2" />
+                    <text x={xForIndex(index)} y={chartHeight - 6} fontSize="10" textAnchor="middle" fill={theme.muted}>{row.time}</text>
+                  </g>
+                ))}
+              </svg>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-3 text-sm">
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: theme.subtle }} />Current Price</div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: theme.accent }} />Proposed Price</div>
+            </div>
+          </SectionCard>
+
+          <SectionCard title="Tee Time Preview" subtitle="Review how tomorrow's prices may move before anything goes live.">
+            <div className="overflow-x-auto">
+              <table className="min-w-[1180px] w-full text-left text-sm">
+                <thead>
+                  <tr style={{ color: theme.subtle }}>
+                    {["Tee Time", "Current Price", "Proposed Price", "Change", "Inventory Left", "Booking Pace", "Traffic / Views", "Weather Impact", "Demand Confidence", "Why It Moved"].map((heading) => (
+                      <th key={heading} className="border-b px-3 py-3 font-semibold" style={{ borderColor: theme.border }}>{heading}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {priceRows.map((row) => {
+                    const delta = row.proposed - row.current;
+                    const deltaLabel = delta === 0 ? "$0" : `${delta > 0 ? "+" : "-"}$${Math.abs(delta)}`;
+                    const deltaStyle =
+                      delta > 0
+                        ? { backgroundColor: theme.softAccent, color: theme.ink }
+                        : delta < 0
+                        ? { backgroundColor: theme.soft, color: theme.ink }
+                        : { backgroundColor: theme.white, color: theme.muted, border: `1px solid ${theme.border}` };
+
+                    return (
+                      <tr key={row.time}>
+                        <td className="border-b px-3 py-4 font-semibold" style={{ borderColor: theme.border }}>{row.time}</td>
+                        <td className="border-b px-3 py-4" style={{ borderColor: theme.border }}>${row.current}</td>
+                        <td className="border-b px-3 py-4 font-semibold" style={{ borderColor: theme.border }}>${row.proposed}</td>
+                        <td className="border-b px-3 py-4" style={{ borderColor: theme.border }}>
+                          <span className="rounded-full px-3 py-1 text-xs font-semibold" style={deltaStyle}>{deltaLabel}</span>
+                        </td>
+                        <td className="border-b px-3 py-4" style={{ borderColor: theme.border }}>{row.inventory}</td>
+                        <td className="border-b px-3 py-4" style={{ borderColor: theme.border }}>
+                          {renderSignalPill(row.pace, row.pace === "Ahead" ? "positive" : row.pace === "Behind" ? "warning" : "neutral")}
+                        </td>
+                        <td className="border-b px-3 py-4" style={{ borderColor: theme.border }}>
+                          {renderSignalPill(row.traffic, row.traffic === "High" ? "positive" : "neutral")}
+                        </td>
+                        <td className="border-b px-3 py-4" style={{ borderColor: theme.border }}>
+                          {renderSignalPill(row.weather, row.weather === "Favorable" ? "positive" : row.weather === "Weak" ? "warning" : "neutral")}
+                        </td>
+                        <td className="border-b px-3 py-4" style={{ borderColor: theme.border }}>
+                          {renderSignalPill(row.confidence, row.confidence === "High" ? "positive" : row.confidence === "Low" ? "warning" : "neutral")}
+                        </td>
+                        <td className="border-b px-3 py-4" style={{ borderColor: theme.border, color: theme.muted }}>{row.why}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </SectionCard>
+
+          <SectionCard title="Workflow" subtitle="Use this page to safely evaluate tomorrow's pricing before anything changes live.">
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+              {[
+                "1. Choose scenario inputs",
+                "2. Preview pricing changes",
+                "3. Review chart and table",
+                "4. Review pricing drivers",
+                "5. Save scenario or publish",
+              ].map((step) => (
+                <div key={step} className="rounded-2xl px-4 py-3 text-sm" style={{ backgroundColor: theme.soft, color: theme.ink }}>
+                  {step}
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <div className="rounded-2xl border px-4 py-3 text-sm" style={{ borderColor: theme.border, backgroundColor: theme.white, color: theme.muted }}>
+                Saving a scenario stores this setup for review without changing live pricing.
+              </div>
+              <div className="rounded-2xl border px-4 py-3 text-sm" style={{ borderColor: theme.border, backgroundColor: theme.white, color: theme.muted }}>
+                Publishing applies the proposed prices to the selected date and course based on your current pricing rails.
+              </div>
+            </div>
+          </SectionCard>
+        </div>
+
+        <div className="space-y-6">
+          <SectionCard title="Why Prices Changed" subtitle="Plain-language explanation designed to help operators trust the pricing logic.">
+            <div className="space-y-3">
+              {currentScenario.drivers.map((driver, index) => (
+                <div key={driver} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.surface }}>
+                  <div className="font-semibold">{`${index + 1}. ${driver}`}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5">
+              <div className="mb-3 text-sm font-semibold">Signal Breakdown</div>
+              <div className="space-y-3">
+                {currentScenario.factorWeights.map(([label, value]) => (
+                  <div key={label}>
+                    <div className="mb-1 flex items-center justify-between text-sm">
+                      <span>{label}</span>
+                      <span style={{ color: theme.muted }}>{value}</span>
+                    </div>
+                    <div className="h-3 rounded-full" style={{ backgroundColor: theme.soft }}>
+                      <div className="h-3 rounded-full" style={{ width: `${value}%`, backgroundColor: theme.accent }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </SectionCard>
+
+          <SectionCard title="Pricing Safety Rails" subtitle="Operators remain in control and suggestions stay within bounded limits.">
+            <div className="space-y-3">
+              {guardrails.map((rule) => (
+                <div key={rule} className="rounded-2xl px-4 py-3 text-sm" style={{ backgroundColor: theme.soft, color: theme.ink }}>
+                  {rule}
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 rounded-2xl border px-4 py-3 text-sm" style={{ borderColor: theme.border, backgroundColor: theme.white, color: theme.muted }}>
+              82% of suggested price changes fall within normal expected adjustment ranges.
+            </div>
+          </SectionCard>
+
+          <SectionCard title="Scenario Notes" subtitle="Optional notes area for internal review and leadership demos.">
+            <TextField
+              label="Internal Notes"
+              value="Balanced profile recommended by system. Morning demand is strong, while afternoon slots remain soft and controlled by existing rails."
+              onChange={() => {}}
+              multiline
+            />
+          </SectionCard>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function BookingEngineWorkspace({ activeTab, onTabChange }) {
   const ratePlans = [
     { name: "Public Prime", window: "Fri-Sun", logic: "Rack Rate", status: "Live" },
@@ -611,38 +1123,7 @@ function BookingEngineWorkspace({ activeTab, onTabChange }) {
     </div>
   );
 
-  const renderSmartPricing = () => (
-    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-      <SectionCard title="Smart Pricing AI" subtitle="Suggested pricing adjustments based on pace, weather, and booking velocity.">
-        <div className="space-y-3">
-          {[
-            "Raise Saturday 8:00 AM-11:00 AM inventory by 9% based on sell-through.",
-            "Release unused lottery holds after 2:00 PM on member event days.",
-            "Reduce after-4 PM pricing by 6% on Tuesdays to improve twilight utilization.",
-          ].map((item) => (
-            <div key={item} className="rounded-2xl px-4 py-3 text-sm" style={{ backgroundColor: theme.background, color: theme.muted }}>
-              {item}
-            </div>
-          ))}
-        </div>
-      </SectionCard>
-      <SectionCard title="Model Inputs" subtitle="Mock signals feeding the pricing engine.">
-        <div className="grid gap-3 sm:grid-cols-2">
-          {[
-            ["7-Day Pace", "82%"],
-            ["Weather Confidence", "High"],
-            ["Local Demand", "Strong"],
-            ["Comp Set Delta", "+$6"],
-          ].map(([label, value]) => (
-            <div key={label} className="rounded-2xl border p-4" style={{ borderColor: theme.border, backgroundColor: theme.white }}>
-              <div className="text-sm" style={{ color: theme.subtle }}>{label}</div>
-              <div className="mt-2 text-2xl font-semibold">{value}</div>
-            </div>
-          ))}
-        </div>
-      </SectionCard>
-    </div>
-  );
+  const renderSmartPricing = () => <ScenarioSandboxWorkspace />;
 
   const renderTeeTimeManager = () => (
     <SectionCard title="Tee Time Manager" subtitle="Monitor inventory releases, holds, and pacing throughout the day.">
