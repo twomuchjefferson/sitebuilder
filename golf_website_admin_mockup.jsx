@@ -617,14 +617,14 @@ function GolfWebsiteAdminDashboard() {
                       className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm transition"
                       style={
                         isActive
-                          ? { backgroundColor: theme.background, color: theme.ink, boxShadow: "0 10px 30px rgba(2, 6, 24, 0.25)" }
+                          ? { backgroundColor: "rgba(43,43,43,.65)", color: theme.white, boxShadow: "0 10px 30px rgba(2, 6, 24, 0.25)" }
                           : { color: theme.darkMuted }
                       }
                     >
                       <span className="flex items-center gap-3">
                         <span
                           className="flex h-9 w-9 items-center justify-center rounded-2xl"
-                          style={isActive ? { backgroundColor: theme.softAccent } : { backgroundColor: theme.darkHover }}
+                          style={isActive ? { backgroundColor: "rgba(255,255,255,0.08)" } : { backgroundColor: theme.darkHover }}
                         >
                           <MenuIcon item={item} active={isActive} />
                         </span>
@@ -633,25 +633,28 @@ function GolfWebsiteAdminDashboard() {
                       {hasChildren ? <ChevronIcon open={isActive} /> : null}
                     </button>
 
-                    {hasChildren && isActive ? (
+                    {hasChildren ? (
                       <div
-                        className="mt-2 space-y-2 rounded-3xl px-3 py-3"
-                        style={{ backgroundColor: "rgba(241, 245, 249, 0.06)", border: `1px solid ${theme.darkBorder}` }}
+                        className={`overflow-hidden transition-all duration-300 ease-out ${
+                          isActive ? "mt-2 max-h-96 opacity-100" : "max-h-0 opacity-0"
+                        }`}
                       >
-                        {flyoutNavItems[item].map((nestedItem) => (
-                          <button
-                            key={nestedItem}
-                            onClick={() => selectFlyoutItem(nestedItem)}
-                            className="w-full rounded-2xl px-4 py-3 text-left text-sm transition"
-                            style={
-                              activeNestedItem === nestedItem
-                                ? { backgroundColor: theme.accent, color: theme.white, fontWeight: 600 }
-                                : { color: theme.darkMuted }
-                            }
-                          >
-                            {nestedItem}
-                          </button>
-                        ))}
+                        <div className="space-y-2 px-3 py-1">
+                          {flyoutNavItems[item].map((nestedItem) => (
+                            <button
+                              key={nestedItem}
+                              onClick={() => selectFlyoutItem(nestedItem)}
+                              className="w-full rounded-2xl px-4 py-3 text-left text-sm transition"
+                              style={
+                                activeNestedItem === nestedItem
+                                  ? { backgroundColor: "rgba(67, 45, 215, .2)", color: theme.white, fontWeight: 600 }
+                                  : { color: theme.darkMuted }
+                              }
+                            >
+                              {nestedItem}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     ) : null}
                   </div>
