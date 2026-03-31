@@ -132,13 +132,13 @@ const bookingEngineTabs = ["Setup", "Rate Management", "Smart Pricing AI", "Tee 
 
 const theme = {
   background: "#F5F5F5",
-  ink: "#2563EB",
+  ink: "#000000",
   accent: "#2563EB",
   white: "#FFFFFF",
   surface: "#FDFDFD",
   border: "#F5F5F5",
-  muted: "rgba(37, 99, 235, 0.72)",
-  subtle: "rgba(37, 99, 235, 0.54)",
+  muted: "#787878",
+  subtle: "#787878",
   soft: "#F5F5F5",
   softAccent: "rgba(87, 135, 239, 0.16)",
   strongAccent: "rgba(87, 135, 239, 0.28)",
@@ -170,7 +170,7 @@ const pageDescriptions = {
 
 function StatusPill({ status }) {
   const styles = {
-    Published: { backgroundColor: theme.softAccent, color: theme.accent },
+    Published: { backgroundColor: theme.softAccent, color: theme.ink },
     Draft: { backgroundColor: theme.soft, color: theme.ink },
     "Not Enabled": { backgroundColor: theme.soft, color: theme.subtle },
   };
@@ -530,7 +530,7 @@ function BookingEngineWorkspace({ activeTab, onTabChange }) {
       <SectionCard
         title="Rate Plans"
         subtitle="Define the pricing frameworks available to the booking engine."
-        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.accent }}>3 Active Plans</span>}
+        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.ink }}>3 Active Plans</span>}
       >
         <div className="space-y-3">
           {ratePlans.map((plan) => (
@@ -540,7 +540,7 @@ function BookingEngineWorkspace({ activeTab, onTabChange }) {
                   <div className="font-semibold">{plan.name}</div>
                   <div className="mt-1 text-sm" style={{ color: theme.muted }}>{plan.window} | {plan.logic}</div>
                 </div>
-                <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: plan.status === "Live" ? theme.softAccent : theme.soft, color: theme.accent }}>
+                <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: plan.status === "Live" ? theme.softAccent : theme.soft, color: theme.ink }}>
                   {plan.status}
                 </span>
               </div>
@@ -582,7 +582,7 @@ function BookingEngineWorkspace({ activeTab, onTabChange }) {
                   style={{
                     borderColor: theme.border,
                     backgroundColor: isHot ? theme.softAccent : theme.white,
-                    color: isHot ? theme.accent : isRealDay ? theme.ink : theme.subtle,
+                    color: isHot ? theme.ink : isRealDay ? theme.ink : theme.subtle,
                   }}
                 >
                   {isRealDay ? dayNumber : ""}
@@ -652,7 +652,7 @@ function BookingEngineWorkspace({ activeTab, onTabChange }) {
                 <div className="font-semibold">{slot.time}</div>
                 <div className="mt-1 text-sm" style={{ color: theme.muted }}>{slot.rule} | {slot.note}</div>
               </div>
-              <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.accent }}>
+              <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.ink }}>
                 {slot.inventory}
               </span>
             </div>
@@ -674,7 +674,7 @@ function BookingEngineWorkspace({ activeTab, onTabChange }) {
                   {reservation.teeTime} | {reservation.source} | {reservation.spend}
                 </div>
               </div>
-              <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.accent }}>
+              <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.ink }}>
                 {reservation.status}
               </span>
             </div>
@@ -809,7 +809,7 @@ function RevenueEngineModuleWorkspace({ module }) {
       <SectionCard
         title={module}
         subtitle={config.subtitle}
-        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.accent }}>{config.badge}</span>}
+        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.ink }}>{config.badge}</span>}
       >
         <div className="grid gap-4 md:grid-cols-3">
           {config.stats.map(([label, value]) => (
@@ -830,7 +830,7 @@ function RevenueEngineModuleWorkspace({ module }) {
                   <div className="font-semibold">{item.title}</div>
                   <div className="mt-1 text-sm" style={{ color: theme.muted }}>{item.detail}</div>
                 </div>
-                <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.accent }}>
+                <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.ink }}>
                   {item.status}
                 </span>
               </div>
@@ -1061,7 +1061,7 @@ function NestedModuleWorkspace({ config }) {
       <SectionCard
         title={config.title}
         subtitle={config.subtitle}
-        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.accent }}>{config.badge}</span>}
+        right={<span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.ink }}>{config.badge}</span>}
       >
         <div className="grid gap-4 md:grid-cols-3">
           {config.stats.map(([label, value]) => (
@@ -1082,7 +1082,7 @@ function NestedModuleWorkspace({ config }) {
                   <div className="font-semibold">{item.title}</div>
                   <div className="mt-1 text-sm" style={{ color: theme.muted }}>{item.detail}</div>
                 </div>
-                <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.accent }}>
+                <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.soft, color: theme.ink }}>
                   {item.status}
                 </span>
               </div>
@@ -1199,7 +1199,7 @@ function DashboardWorkspace() {
                     <div className="font-semibold">{module.title}</div>
                     <div className="mt-1 text-sm" style={{ color: theme.muted }}>{module.detail}</div>
                   </div>
-                  <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.accent }}>
+                  <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: theme.softAccent, color: theme.ink }}>
                     {module.value}
                   </span>
                 </div>
@@ -1413,7 +1413,7 @@ function GolfWebsiteAdminDashboard() {
                               className="w-full rounded-2xl px-4 py-3 text-left text-sm transition"
                               style={
                                 activeNestedItem === nestedItem
-                                  ? { backgroundColor: theme.softAccent, color: theme.accent, fontWeight: 600 }
+                                  ? { backgroundColor: theme.softAccent, color: theme.ink, fontWeight: 600 }
                                   : { color: theme.muted }
                               }
                             >
@@ -1441,7 +1441,7 @@ function GolfWebsiteAdminDashboard() {
                 <button
                   key={item}
                   className="mb-2 w-full rounded-2xl px-4 py-3 text-left text-sm transition"
-                  style={item === "Sign Out" ? { color: theme.accent } : { color: theme.muted }}
+                  style={item === "Sign Out" ? { color: theme.ink } : { color: theme.muted }}
                 >
                   {item}
                 </button>
@@ -1497,7 +1497,7 @@ function GolfWebsiteAdminDashboard() {
                   right={
                     <span
                       className="rounded-full px-3 py-1 text-xs font-semibold"
-                      style={{ backgroundColor: theme.softAccent, color: theme.accent }}
+                      style={{ backgroundColor: theme.softAccent, color: theme.ink }}
                     >
                       Theme Ready
                     </span>
@@ -1618,7 +1618,7 @@ function GolfWebsiteAdminDashboard() {
                   right={
                     <span
                       className="rounded-full px-3 py-1 text-xs font-semibold"
-                      style={{ backgroundColor: theme.softAccent, color: theme.accent }}
+                      style={{ backgroundColor: theme.softAccent, color: theme.ink }}
                     >
                       Next Scan: Sunday 2:00 AM
                     </span>
@@ -1648,7 +1648,7 @@ function GolfWebsiteAdminDashboard() {
                             </span>
                             <span
                               className="rounded-full px-3 py-1 text-xs font-semibold"
-                              style={{ backgroundColor: theme.softAccent, color: theme.accent }}
+                              style={{ backgroundColor: theme.softAccent, color: theme.ink }}
                             >
                               {item.priority}
                             </span>
